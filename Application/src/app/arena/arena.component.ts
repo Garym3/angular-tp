@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import {Pokemon} from '../pokemon/pokemon'
 import {Fight} from '../fight/fight'
 
@@ -9,9 +9,9 @@ import {Fight} from '../fight/fight'
   styleUrls: ['./arena.component.css']
 })
 export class ArenaComponent {
-  firstPokemon: Pokemon;
-  secondPokemon: Pokemon;
-  fight: Fight;
+  firstPokemon: Pokemon = undefined;
+  secondPokemon: Pokemon = undefined;
+  fight: Fight = undefined;
   isOver: string = "No";
   fightLogs: string = "";
   fightIsPaused: boolean = true;

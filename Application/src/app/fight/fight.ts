@@ -8,6 +8,7 @@ export class Fight {
     isOver: boolean = false;
     logs: string[] = [];
     isPaused: boolean = true;
+    roundCount: number = 0;
 
     constructor(firstPokemon: Pokemon, secondPokemon: Pokemon){
         this.firstPokemon = firstPokemon;
@@ -39,15 +40,16 @@ export class Fight {
         const currentFight = this;
 
         var interval = setInterval(() => {
-            var haveHealthLeft: boolean = currentFight.firstPokemon.health > 0 && currentFight.secondPokemon.health > 0;
-
             if(!this.isPaused){
+                var haveHealthLeft: boolean = currentFight.firstPokemon.health > 0 && currentFight.secondPokemon.health > 0;
+    
                 if(haveHealthLeft){
                     if(currentFight.isWon()) {
                         clearInterval(interval);
                         return callback(currentFight);
                     }
                 
+                    this.logs.push(`--------- Round n°${this.roundCount += 1} ---------`);
                     currentFight.attackRound();                    
                 } else {
                     clearInterval(interval);
@@ -65,13 +67,15 @@ export class Fight {
 
     isWon(): boolean{
         if(this.firstPokemon.health <= 0) {
+            this.firstPokemon.health = 0;
             this.winner = this.secondPokemon;
-            this.logs.push(`${this.winner.name} wins!`);
+            this.logs.push(`<br>${this.winner.name} wins!`);
             this.isOver = true;
             return true;
         } else if(this.secondPokemon.health <= 0) {
+            this.secondPokemon.health = 0;
             this.winner = this.firstPokemon;
-            this.logs.push(`${this.winner.name} wins!`);
+            this.logs.push(`<br>${this.winner.name} wins!`);
             this.isOver = true;
             return true;
         }

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import {Pokemon} from './pokemon/pokemon'
-import {Fight} from './fight/fight'
 
 @Component({
   selector: 'app-root',
@@ -8,7 +6,7 @@ import {Fight} from './fight/fight'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Angular TP';
+  title = 'Pokémon Arena';
 
   constructor() { 
   }
