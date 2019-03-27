@@ -29,10 +29,7 @@ export class Fight {
 	}
 
     checkPokemonsStats(): boolean {
-	    if (this.firstPokemon.health <= 0 || this.secondPokemon.health <= 0) {
-            return false;
-        }
-        return true;
+	    return this.firstPokemon.health <= 0 || this.secondPokemon.health <= 0;
     }
 
     round(): boolean{
