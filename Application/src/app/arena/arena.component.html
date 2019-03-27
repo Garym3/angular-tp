@@ -1,6 +1,6 @@
 <img src="../../assets/images/poke-dribbble.png">
 <h2>{{firstPokemon.name}} vs {{secondPokemon.name}}</h2>
-<p>Fight in progress? {{fightInProgress}}</p>
+<p>Fight in progress? {{fightInProgress ? "Yes" : "No"}}</p>
 <button id="pauseBtn" (click)="onClickMe(fight)">Play/Pause</button>
 <div class="container">
   <div class="healthBarContainer">

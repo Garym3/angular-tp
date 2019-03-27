@@ -12,7 +12,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   firstPokemon: Pokemon = undefined;
   secondPokemon: Pokemon = undefined;
   fight: Fight = undefined;
-  fightInProgress: string = "No";
+  fightInProgress: boolean = true;
   fightLogs: string[] = [""];
   fightIsPaused: boolean = true;
 
@@ -27,7 +27,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       if(!this.fightIsPaused){
         if(this.fight.round()){
           clearInterval(interval);
-          this.fightInProgress = this.fight.isOver ? "No" : "Yes";  
+          this.fightInProgress = !this.fight.isOver;  
           this.fight.isPaused = this.fightIsPaused;
           this.fightLogs = this.fightLogs.concat(this.fight.logs);
           return;
@@ -48,6 +48,6 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    console.log(changes);
+    //console.log(changes);
   }
 }
