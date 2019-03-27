@@ -1,5 +1,6 @@
 import {Pokemon} from '../pokemon/pokemon'
 import { TimeInterval } from 'rxjs';
+import { callbackify } from 'util';
 
 export class Fight {
     firstPokemon: Pokemon = undefined;
@@ -32,21 +33,18 @@ export class Fight {
 	    return this.firstPokemon.health <= 0 || this.secondPokemon.health <= 0;
     }
 
-    round(): boolean{
+    round(callback: any): void{
         this.hasStarted = true;
         this.logs = [""];
 
         if(!this.isPaused){
-            if(this.isWon()) return true;
+            if(this.isWon()) return;
         
             this.logs.push(`<b>--------- Round n°${this.roundCount += 1} ---------</b><br>`);
             
-            this.firstAttack();
-            if(this.isWon()) return true;
-            this.riposte();
+            this.launchAttack(callback);
+            if(this.isWon()) return callback(this.isOver);
         }
-
-        return false;
     }
 
     isWon(): boolean{
@@ -63,33 +61,47 @@ export class Fight {
         this.logs.push(`<h2>${this.winner.name} wins!</h2>`);
         this.isOver = true;
 
-        return true;
+        return this.isOver;
     }
 
-    firstAttack(){
+    riposte(callback: any){
+        if(!this.hasStarted || this.isOver) return;
+
+        if(this.firstPokemon.speed >= this.secondPokemon.speed) {
+            this.damagePokemon(this.secondPokemon, this.firstPokemon, callback);
+        } else {
+            this.damagePokemon(this.firstPokemon, this.secondPokemon, callback);
+        }
+    }
+
+    launchAttack(callback: any){
         if(this.isOver) return;
 
         this.hasStarted = true;
 
         if(this.firstPokemon.speed >= this.secondPokemon.speed) {
-            this.damagePokemon(this.firstPokemon, this.secondPokemon);
+            this.damagePokemon(this.firstPokemon, this.secondPokemon, callback);
+            return this.riposte(callback);
         } else {
-            this.damagePokemon(this.secondPokemon, this.firstPokemon);
+            this.damagePokemon(this.secondPokemon, this.firstPokemon, callback);
+            return this.riposte(callback);
         }
     }
 
-    riposte(){
-        if(!this.hasStarted || this.isOver) return;
+    damagePokemon(damageFrom: Pokemon, damageTarget: Pokemon, callback: any){
+        
+        const newCurrentHp: number = (damageTarget.health - damageFrom.attackPoints) < 0 ? 0 : damageTarget.health - damageFrom.attackPoints;
 
-        if(this.firstPokemon.speed >= this.secondPokemon.speed) {
-            this.damagePokemon(this.secondPokemon, this.firstPokemon);
-        } else {
-            this.damagePokemon(this.firstPokemon, this.secondPokemon);
-        }
-    }
+        const interval = setInterval(() => {
+            if(damageTarget.health === newCurrentHp) {
+                clearInterval(interval);
+                return callback();
+            }
+            
+            damageTarget.health -= 1;
+        }, 100);
 
-    damagePokemon(damageFrom: Pokemon, damageTarget: Pokemon){
-        damageTarget.health = (damageTarget.health - damageFrom.attackPoints) < 0 ? 0 : damageTarget.health - damageFrom.attackPoints;
+        
         this.logs.push(`${damageTarget.name} took ${damageFrom.attackPoints} damages from ${damageFrom.name}.<br>`);
     }
 }

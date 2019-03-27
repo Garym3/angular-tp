@@ -1,4 +1,46 @@
-<img src="../../assets/images/poke-dribbble.png">
+<div id="wrapper">
+  <div class="fightContainer">
+    <img src="../../assets/images/background.jpg" class="fightContainerBackground" />
+    <div class="fightInnerContainer">
+      <div class="fightTopOpponent">
+        <div class="fightOpponentInfo">
+          <div id="topOpponentName" class="fightOpponentInfoName">{{firstPokemon.name}}</div>
+          <div class="fightOpponentInfoHealth">
+            <div id="topOpponentHealthFiller" [ngStyle]="{'width.%': (firstPokemon.health * 100) / firstPokemon.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
+            <div id="topOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{firstPokemon.health}} / {{firstPokemon.maxHealth}} HP</div>
+          </div>
+        </div>
+        <div class="fightTopOpponentGif">
+          <img src="../../assets/images/animated/bulbasaur_front.gif" />
+        </div>
+      </div>
+      <div class="fightBottomOpponent">
+        <div class="fightBottomOpponentGif">
+          <img src="../../assets/images/animated/pikachu_back.gif" />
+        </div>
+        <div class="fightOpponentInfo">
+          <div id="bottomOpponentName" class="fightOpponentInfoName">{{secondPokemon.name}}</div>
+          <div class="fightOpponentInfoHealth">
+            <div id="bottomOpponentHealthFiller" [ngStyle]="{'width.%': (secondPokemon.health * 100) / secondPokemon.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
+            <div id="bottomOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{secondPokemon.health}} / {{secondPokemon.maxHealth}} HP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="logsContainer">
+    <div class="logsContainerTitle">Fight progress</div>
+    <div class="logsContainerList" id="logsList" *ngFor="let log of fightLogs">
+      <p [innerHtml] ="log"></p>
+    </div>
+    
+    <button id="pauseBtn" (click)="pauseFight()">Play/Pause</button>
+    <button (click)="restartFight()">Restart fight</button>
+  </div>
+</div>
+
+
+<!-- <img src="../../assets/images/poke-dribbble.png">
 <h2>{{firstPokemon.name}} vs {{secondPokemon.name}}</h2>
 <p>Fight in progress? {{fightInProgress ? "Yes" : "No"}}</p>
 <button id="pauseBtn" (click)="pauseFight(fight)">Play/Pause</button>
@@ -27,4 +69,4 @@
 <h3>Fight logs</h3>
 <div id="logs" *ngFor="let log of fightLogs">
   <p [innerHtml] ="log"></p>
-</div>
+</div> -->

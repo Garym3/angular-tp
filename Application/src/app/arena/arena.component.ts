@@ -1,8 +1,6 @@
-import { Component, Input, HostListener, OnInit, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import {Pokemon} from '../pokemon/pokemon'
 import {Fight} from '../fight/fight'
-import { AngularWaitBarrier } from 'blocking-proxy/built/lib/angular_wait_barrier';
-import { TimeInterval } from 'rxjs';
 
 
 @Component({
@@ -16,22 +14,26 @@ export class ArenaComponent {
   fight: Fight = undefined;
   fightInProgress: boolean = true;
   fightLogs: string[] = [""];
-  fightIsPaused: boolean = true;
-
-  fightInterval: NodeJS.Timer = null
 
   constructor(){
     this.initFight();
+    this.startFight();
   }
 
-  pauseFight(fight: Fight) : void{
-    this.fightIsPaused = !this.fightIsPaused;
-    fight.isPaused = this.fightIsPaused;
+  pauseFight() : void{
+    // this.fight.isPaused = this.fight.isPaused;
+
+    if(this.fight.isPaused) {
+      this.fight.isPaused = false;
+      this.startFight();
+    } else {
+      this.fight.isPaused = true;
+    }
   }
 
-  restartFight(): void {    
-    if(this.fightInterval != null) clearInterval(this.fightInterval);
+  restartFight(): void {
     this.initFight();
+    this.startFight();
   }
 
   private initFight(): void{
@@ -40,20 +42,20 @@ export class ArenaComponent {
     this.fight = new Fight(this.firstPokemon, this.secondPokemon);    
     this.fightLogs = [""];
     this.fightInProgress = true;
-    this.fightIsPaused = true;
+  }
 
-    this.fightInterval = setInterval(() => {
-      if(!this.fightIsPaused){
-        if(this.fight.round()){
-          clearInterval(this.fightInterval);
-          this.fightInProgress = !this.fight.isOver;  
-          this.fight.isPaused = this.fightIsPaused;
-          this.fightLogs = this.fightLogs.concat(this.fight.logs);
-          return;
-        }      
-        
-        this.fightLogs = this.fightLogs.concat(this.fight.logs);
+  private startFight(): void {
+    this.fight.round((isOver: boolean) => {
+
+      this.fightLogs = this.fightLogs.concat(this.fight.logs);
+      if(isOver){
+        this.fightInProgress = !this.fight.isOver;
+        return;
       }
-    }, 1000);
+
+      setTimeout(() => {
+        this.startFight();
+      }, 1000);
+    });
   }
 }

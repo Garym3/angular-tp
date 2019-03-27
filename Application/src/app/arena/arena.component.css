@@ -1,4 +1,60 @@
-.container { 
+/****************************************************************************************************/
+
+.logsContainer{ display:flex; flex-direction:column; justify-content:flex-start; border-radius:2px; background-color:#FFFFFF; width:400px; height:576px; margin:20px 20px 20px 10px; }
+
+.logsContainerTitle{ padding:10px 20px 10px 20px; font-size:1.2em; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+.logsContainerList{ flex-grow:2; margin:10px; padding:10px; border:1px solid rgba(0,0,0,0.25); border-radius:2px; overflow-y:scroll; }
+
+.logsListElement{ font-size:0.9em; }
+
+.logsListElement span{ font-weight:bold; }
+
+.logsListElement span.pokemon{ color:#759EB8; }
+
+.logsListElement span.attack{ color:#5CB85C; }
+
+.logsListElement span.damages{ color:#D9534F; }
+
+.logsListElement span.ko{ color:#D9534F; }
+
+/****************************************************************************************************/
+
+.fightContainer{ border-radius:2px; width:768px; height:576px; overflow:hidden; box-sizing:border-box; margin:20px 10px 20px 20px; position:relative; }
+
+.fightContainerBackground{ width:768px; height:576px; position:absolute; top:0; right:0; bottom:0; left:0; z-index:0; }
+
+.fightInnerContainer{ height:100%; display:flex; flex-direction:column; justify-content:space-between; position:relative; z-index:10; }
+
+.fightTopOpponent{ height:50%; display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; }
+
+.fightBottomOpponent{ height:50%; display:flex; flex-direction:row; align-items:flex-end; justify-content:space-between; }
+
+.fightOpponentInfo{ width:300px; background-color:#FFFFFF; border-radius:4px; padding:10px; margin:10px; }
+
+.fightOpponentInfoName{ font-size:0.9em; margin-bottom:5px; }
+
+.fightOpponentInfoHealth{ text-align:center; overflow:hidden; width:100%; background-color:rgba(0,0,0,0.2); position:relative; border-radius:4px; box-sizing:border-box; }
+
+.fightOpponentInfoHealthFiller{ width:100%; position:absolute; top:0; bottom:0; left:0; background-color:#5CB85C; z-index:0; }
+
+.fightOpponentInfoHealthStatus{ font-weight:bold; font-size:0.7em; padding:2px 0 2px 0; color:rgba(0,0,0,0.75); position:relative; z-index:10; }
+
+.fightBottomOpponentGif{ margin-bottom:40px; margin-left:40px; }
+
+.fightBottomOpponentGif img{ width:200px; }
+
+.fightTopOpponentGif{ margin-top:240px; margin-right:100px; }
+
+.fightTopOpponentGif img{ width:120px; }
+
+/****************************************************************************************************/
+
+button{ padding:5px 15px 5px 15px; border:1px solid #759EB8; border-radius:4px; color:#759EB8; cursor:pointer; background-color:#FFFFFF; width:calc(100% - 20px); margin:10px; }
+
+button:hover{ color:#537C96; border:1px solid #537C96; }
+
+/* .container { 
     display:flex;
 	flex-direction:row;
 	justify-content:center;
@@ -45,4 +101,4 @@
 .healthBarStatus { 
     position: relative;
 	z-index: 1;
-}
+} */

@@ -11,7 +11,7 @@ export class Pokemon {
 
     constructor(name: string, health: number, speed: number, attack: number,
         defense: number, specialAttack: number, specialDefense: number){
-        this.name = name;
+        this.name = `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`;
         this.health = health;
         this.speed = speed;
         this.attackPoints = attack;
