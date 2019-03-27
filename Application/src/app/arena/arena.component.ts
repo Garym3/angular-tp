@@ -1,6 +1,8 @@
-import { Component, Input, HostListener, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, HostListener, OnInit, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import {Pokemon} from '../pokemon/pokemon'
 import {Fight} from '../fight/fight'
+import { AngularWaitBarrier } from 'blocking-proxy/built/lib/angular_wait_barrier';
+import { TimeInterval } from 'rxjs';
 
 
 @Component({
@@ -8,7 +10,7 @@ import {Fight} from '../fight/fight'
   templateUrl: './arena.component.html',
   styleUrls: ['./arena.component.css']
 })
-export class ArenaComponent implements OnInit, OnChanges {
+export class ArenaComponent {
   firstPokemon: Pokemon = undefined;
   secondPokemon: Pokemon = undefined;
   fight: Fight = undefined;
@@ -16,17 +18,34 @@ export class ArenaComponent implements OnInit, OnChanges {
   fightLogs: string[] = [""];
   fightIsPaused: boolean = true;
 
-  @Output() roundDoneAlert = new EventEmitter<any>();
+  fightInterval: NodeJS.Timer = null
 
   constructor(){
+    this.initFight();
+  }
+
+  pauseFight(fight: Fight) : void{
+    this.fightIsPaused = !this.fightIsPaused;
+    fight.isPaused = this.fightIsPaused;
+  }
+
+  restartFight(): void {    
+    if(this.fightInterval != null) clearInterval(this.fightInterval);
+    this.initFight();
+  }
+
+  private initFight(): void{
     this.firstPokemon = new Pokemon("Pikachu", 200, 90, 50, 40, 50, 50);
     this.secondPokemon = new Pokemon("Bulbasaur", 200, 45, 65, 49, 65, 45);
-    this.fight = new Fight(this.firstPokemon, this.secondPokemon);
+    this.fight = new Fight(this.firstPokemon, this.secondPokemon);    
+    this.fightLogs = [""];
+    this.fightInProgress = true;
+    this.fightIsPaused = true;
 
-    var interval = setInterval(() => {
+    this.fightInterval = setInterval(() => {
       if(!this.fightIsPaused){
         if(this.fight.round()){
-          clearInterval(interval);
+          clearInterval(this.fightInterval);
           this.fightInProgress = !this.fight.isOver;  
           this.fight.isPaused = this.fightIsPaused;
           this.fightLogs = this.fightLogs.concat(this.fight.logs);
@@ -36,18 +55,5 @@ export class ArenaComponent implements OnInit, OnChanges {
         this.fightLogs = this.fightLogs.concat(this.fight.logs);
       }
     }, 1000);
-  }
-
-  onClickMe(fight: Fight){
-    this.fightIsPaused = !this.fightIsPaused;
-    fight.isPaused = this.fightIsPaused;
-  }
-
-  ngOnInit(): void {
-    
-  }
-
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    //console.log(changes);
   }
 }
