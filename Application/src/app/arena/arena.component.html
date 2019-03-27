@@ -11,12 +11,12 @@
           </div>
         </div>
         <div class="fightTopOpponentGif">
-          <img src="../../assets/images/animated/bulbasaur_front.gif" />
+          <img id="topOpponentGif" src="../../assets/images/animated/bulbasaur_front.gif" />
         </div>
       </div>
       <div class="fightBottomOpponent">
         <div class="fightBottomOpponentGif">
-          <img src="../../assets/images/animated/pikachu_back.gif" />
+          <img id="bottomOpponentGif" src="../../assets/images/animated/pikachu_back.gif" />
         </div>
         <div class="fightOpponentInfo">
           <div id="bottomOpponentName" class="fightOpponentInfoName">{{secondPokemon.name}}</div>
@@ -30,10 +30,9 @@
   </div>
   <div class="logsContainer">
     <div class="logsContainerTitle">Fight progress</div>
-    <div class="logsContainerList" id="logsList" *ngFor="let log of fightLogs">
-      <p [innerHtml] ="log"></p>
+    <div class="logsContainerList" id="logsList">
+      <div *ngFor="let element of fightLogs" [innerHtml]="element"></div>
     </div>
-    
     <button id="pauseBtn" (click)="pauseFight()">Play/Pause</button>
     <button (click)="restartFight()">Restart fight</button>
   </div>
@@ -55,7 +54,7 @@
         <div class="healthBarFiller"></div>
       </div>
     </div>
-    
+
     <div class="healthBar">
       <div class="healthBarName" style="text-align: right;">{{secondPokemon.name}}</div>
 

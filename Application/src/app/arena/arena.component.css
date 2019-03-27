@@ -54,14 +54,14 @@ button{ padding:5px 15px 5px 15px; border:1px solid #759EB8; border-radius:4px; 
 
 button:hover{ color:#537C96; border:1px solid #537C96; }
 
-/* .container { 
+/* .container {
     display:flex;
 	flex-direction:row;
 	justify-content:center;
 	align-items:center;
 }
 
-.healthBarContainer { 
+.healthBarContainer {
     display:flex;
     flex-direction:row;
 	justify-content:space-between;
@@ -71,12 +71,12 @@ button:hover{ color:#537C96; border:1px solid #537C96; }
     font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.healthBar { 
+.healthBar {
     width: calc(50% - 10px);
 	margin: 0 5px 0 5px;
 }
 
-.healthBarBackground { 
+.healthBarBackground {
     position: relative;
 	text-align: center;
 	color:rgba(0,0,0,0.5);
@@ -88,7 +88,7 @@ button:hover{ color:#537C96; border:1px solid #537C96; }
 	background-color: rgba(0,0,0,0.05);
 }
 
-.healthBarFiller { 
+.healthBarFiller {
     position: absolute;
 	top: 0;
 	bottom: 0;
@@ -98,7 +98,7 @@ button:hover{ color:#537C96; border:1px solid #537C96; }
 	z-index: 0;
 }
 
-.healthBarStatus { 
+.healthBarStatus {
     position: relative;
 	z-index: 1;
 } */
