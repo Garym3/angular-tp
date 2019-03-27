@@ -1,15 +1,29 @@
-<div>
-  <h2>{{firstPokemon.name}} vs {{secondPokemon.name}}</h2>
-  <p>Fight is over: {{isOver}}</p>
-  <button id="pauseBtn" (click)="onClickMe(fight)">Play/Pause</button>
-  <h3>Fight logs</h3>
-  <div style="display:flex; flex-direction:row; justify-content: center;">
-    <div>
-      <hr>
-      <div>
-        <p>{{firstPokemon.name}}: {{firstPokemon.health}} hp left - {{secondPokemon.name}}: {{secondPokemon.health}} hp left</p>
+<img src="../../assets/images/poke-dribbble.png">
+<h2>{{firstPokemon.name}} vs {{secondPokemon.name}}</h2>
+<p>Fight in progress? {{fightInProgress}}</p>
+<button id="pauseBtn" (click)="onClickMe(fight)">Play/Pause</button>
+<div class="container">
+  <div class="healthBarContainer">
+    <div class="healthBar">
+      <div class="healthBarName" style="text-align: left;">{{firstPokemon.name}}</div>
+
+      <div class="healthBarBackground">
+        <div class="healthBarStatus">{{firstPokemon.health}} / {{firstPokemon.maxHealth}} HP</div>
+        <div class="healthBarFiller"></div>
       </div>
-      <div [innerHtml]="fightLogs"></div>
+    </div>
+    
+    <div class="healthBar">
+      <div class="healthBarName" style="text-align: right;">{{secondPokemon.name}}</div>
+
+      <div class="healthBarBackground">
+        <div class="healthBarStatus">{{secondPokemon.health}} / {{secondPokemon.maxHealth}} HP</div>
+        <div class="healthBarFiller"></div>
+      </div>
     </div>
   </div>
+</div>
+<h3>Fight logs</h3>
+<div *ngFor="let log of fightLogs">
+  <p [innerHtml] ="log"></p>
 </div>

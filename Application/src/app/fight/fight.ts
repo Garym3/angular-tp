@@ -1,12 +1,13 @@
 import {Pokemon} from '../pokemon/pokemon'
+import { TimeInterval } from 'rxjs';
 
 export class Fight {
-    firstPokemon: Pokemon;
-    secondPokemon: Pokemon;
+    firstPokemon: Pokemon = undefined;
+    secondPokemon: Pokemon = undefined;
     winner: Pokemon = undefined;
     hasStarted: boolean = false;
     isOver: boolean = false;
-    logs: string[] = [];
+    logs: string[] = [""];
     isPaused: boolean = true;
     roundCount: number = 0;
 
@@ -17,12 +18,12 @@ export class Fight {
 
 	beforeStartChecks() {
 		if(this.hasStarted) {
-            this.logs.push("Fight has already started.");
+            this.logs.push("Fight has already started.<br>");
 			return;
 		}
 
 		if(!this.checkPokemonsStats()) {
-            this.logs.push("Fight hasn't started because one of the fighters doesn't meet requirements.");
+            this.logs.push("Fight hasn't started because one of the fighters doesn't meet requirements.<br>");
             return;
 		}
 	}
@@ -34,53 +35,38 @@ export class Fight {
         return true;
     }
 
-    start(callback) {
+    round(): boolean{
         this.hasStarted = true;
+        this.logs = [""];
 
-        const currentFight = this;
+        if(!this.isPaused){
+            if(this.isWon()) return true;
+        
+            this.logs.push(`<b>--------- Round n°${this.roundCount += 1} ---------</b><br>`);
+            
+            this.firstAttack();
+            if(this.isWon()) return true;
+            this.riposte();
+        }
 
-        var interval = setInterval(() => {
-            if(!this.isPaused){
-                var haveHealthLeft: boolean = currentFight.firstPokemon.health > 0 && currentFight.secondPokemon.health > 0;
-    
-                if(haveHealthLeft){
-                    if(currentFight.isWon()) {
-                        clearInterval(interval);
-                        return callback(currentFight);
-                    }
-                
-                    this.logs.push(`--------- Round n°${this.roundCount += 1} ---------`);
-                    currentFight.attackRound();                    
-                } else {
-                    clearInterval(interval);
-                    return callback(currentFight);
-                }
-            }
-        }, 1000);
-    }
-
-    attackRound(){
-        this.firstAttack();
-        if(this.isWon()) return;
-        this.riposte();
+        return false;
     }
 
     isWon(): boolean{
         if(this.firstPokemon.health <= 0) {
-            this.firstPokemon.health = 0;
             this.winner = this.secondPokemon;
-            this.logs.push(`<br>${this.winner.name} wins!`);
-            this.isOver = true;
-            return true;
+            this.logs.push(`<h3>${this.firstPokemon.name} is K.O.!</h3>`);
         } else if(this.secondPokemon.health <= 0) {
-            this.secondPokemon.health = 0;
             this.winner = this.firstPokemon;
-            this.logs.push(`<br>${this.winner.name} wins!`);
-            this.isOver = true;
-            return true;
+            this.logs.push(`<h3>${this.secondPokemon.name} is K.O.!</h3>`);
+        } else {
+            return false;
         }
 
-        return false;
+        this.logs.push(`<h2>${this.winner.name} wins!</h2>`);
+        this.isOver = true;
+
+        return true;
     }
 
     firstAttack(){
@@ -89,11 +75,9 @@ export class Fight {
         this.hasStarted = true;
 
         if(this.firstPokemon.speed >= this.secondPokemon.speed) {
-            this.secondPokemon.health -= this.firstPokemon.attack;
-            this.logs.push(`${this.secondPokemon.name} took ${this.firstPokemon.attack} damages from ${this.firstPokemon.name}.`);
+            this.damagePokemon(this.firstPokemon, this.secondPokemon);
         } else {
-            this.firstPokemon.health -= this.secondPokemon.attack;
-            this.logs.push(`${this.firstPokemon.name} took ${this.secondPokemon.attack} damages from ${this.secondPokemon.name}.`);
+            this.damagePokemon(this.secondPokemon, this.firstPokemon);
         }
     }
 
@@ -101,11 +85,14 @@ export class Fight {
         if(!this.hasStarted || this.isOver) return;
 
         if(this.firstPokemon.speed >= this.secondPokemon.speed) {
-            this.firstPokemon.health -= this.secondPokemon.attack;
-            this.logs.push(`${this.firstPokemon.name} took ${this.secondPokemon.attack} damages from ${this.secondPokemon.name}.`);
+            this.damagePokemon(this.secondPokemon, this.firstPokemon);
         } else {
-            this.secondPokemon.health -= this.firstPokemon.attack;
-            this.logs.push(`${this.secondPokemon.name} took ${this.firstPokemon.attack} damages from ${this.firstPokemon.name}.`);
+            this.damagePokemon(this.firstPokemon, this.secondPokemon);
         }
+    }
+
+    damagePokemon(damageFrom: Pokemon, damageTarget: Pokemon){
+        damageTarget.health = (damageTarget.health - damageFrom.attackPoints) < 0 ? 0 : damageTarget.health - damageFrom.attackPoints;
+        this.logs.push(`${damageTarget.name} took ${damageFrom.attackPoints} damages from ${damageFrom.name}.<br>`);
     }
 }
