@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {Pokemon} from '../classes/pokemon'
 import {Skill} from '../classes/skill'
@@ -22,7 +23,14 @@ export class ArenaComponent {
   bottomOpponentBlinking: string = 'block';
   fightRoundInterval: NodeJS.Timer;
 
-  constructor(private datePipe: DatePipe, private decimalPipe: DecimalPipe){
+  constructor(private datePipe: DatePipe, private decimalPipe: DecimalPipe, route: ActivatedRoute)
+  {
+    route.queryParams.subscribe(params =>
+    {
+      const firstFighterId = params['first'];
+      const secondFighterId = params['second'];
+    });
+
     this.initFight();
     this.startFight();
   }
@@ -34,8 +42,8 @@ export class ArenaComponent {
     const vineWhip: Skill = new Skill('vine whip', 35, 100);
     const powerWhip: Skill = new Skill('power whip', 120, 85);
 
-    this.topOpponent = new Pokemon("Bulbasaur", 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip]);
-    this.bottomOpponent = new Pokemon("Pikachu", 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder]);
+    this.topOpponent = new Pokemon('Bulbasaur', 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip], '', '');
+    this.bottomOpponent = new Pokemon('Pikachu', 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder], '', '');
 
     this.fight = new Fight(this.topOpponent, this.bottomOpponent);
     this.fightLogs = [];
@@ -53,16 +61,16 @@ export class ArenaComponent {
     this.handleFight(firstToAttack, secondToAttack);
   }
 
-  
+
   private handleFight(attacker: Pokemon, attacked: Pokemon): void
   {
-    this.fightRoundInterval = setInterval(() => 
+    this.fightRoundInterval = setInterval(() =>
     {
       if(this.intervalIsPaused) return;
 
       this.intervalIsPaused = true;
 
-      this.fight.fightProcess(attacker, attacked, this.fightLogs, (hasHit: boolean, damages: number, isDown: boolean) => 
+      this.fight.fightProcess(attacker, attacked, this.fightLogs, (hasHit: boolean, damages: number, isDown: boolean) =>
       {
         if(hasHit === false)
         {
@@ -84,7 +92,7 @@ export class ArenaComponent {
 
             return clearInterval(this.fightRoundInterval);
           }
-          
+
           const tmpOpponent = attacker;
           attacker = attacked;
           attacked = tmpOpponent;
@@ -105,7 +113,7 @@ export class ArenaComponent {
       this.fight.isPaused = true;
       this.intervalIsPaused = true;
     }
-  }  
+  }
 
   restartFight(): void {
     clearInterval(this.fightRoundInterval);
