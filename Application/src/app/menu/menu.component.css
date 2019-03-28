@@ -1,0 +1,21 @@
+/****************************************************************************************************/
+
+#wrapper{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; }
+
+#container{ display:flex; flex-direction:row; justify-content:center; width:100%; }
+
+/****************************************************************************************************/
+
+.menu{ background-color:#FFFFFF; width:calc(100% - 40px); margin:40px 20px 40px 20px; max-width:400px; border-radius:2px; }
+
+.menuHeader{ padding:10px 20px 10px 20px; font-size:1.25em; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+.menuList{ padding:40px 20px 40px 20px; }
+
+.menuListLink{ padding:5px 15px 5px 15px; border:1px solid #759EB8; border-radius:4px; color:#759EB8; cursor:pointer; background-color:#FFFFFF; width:100%; box-sizing:border-box; margin:10px 0 10px 0; }
+
+.menuListLink:hover{ color:#537C96; border:1px solid #537C96; }
+
+.menuListDisabled{ padding:5px 15px 5px 15px; outline:none; border:1px solid rgba(0,0,0,0.25); border-radius:4px; color:rgba(0,0,0,0.25); background-color:#FFFFFF; width:100%; box-sizing:border-box; margin:10px 0 10px 0; }
+
+/****************************************************************************************************/

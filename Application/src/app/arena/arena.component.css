@@ -1,5 +1,9 @@
 /****************************************************************************************************/
 
+#wrapper{ min-height:100vh; display:flex; flex-direction:row; justify-content:center; }
+
+/****************************************************************************************************/
+
 .logsContainer{ display:flex; flex-direction:column; justify-content:flex-start; border-radius:2px; background-color:#FFFFFF; width:400px; height:576px; margin:20px 20px 20px 10px; }
 
 .logsContainerTitle{ padding:10px 20px 10px 20px; font-size:1.2em; border-bottom:1px solid rgba(0,0,0,0.25); }
