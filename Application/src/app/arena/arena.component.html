@@ -34,7 +34,7 @@
       <div class="logsListElement">
         Fight begins at <span class="date">{{startDate | date:'h:mm:ss a'}}</span>
       </div><br>
-      <div class="logsListElement" *ngFor="let element of fightLogs">
+      <div class="logsListElement" *ngFor="let element of fightLogs.reverse()">
         <div [ngSwitch]="element.type">
           <div *ngSwitchCase="'start'">
             A fight begins between <span class="pokemon">{{element.topOpponent}}</span> and <span class="pokemon">{{element.bottomOpponent}}</span>!
@@ -57,10 +57,11 @@
           <br *ngSwitchCase="'start'">
           <br *ngSwitchCase="'miss'">
           <br *ngSwitchCase="'damages'">
+          <br *ngSwitchCase="'faint'">
         </div>
       </div>
     </div>
-    <button id="pauseBtn" (click)="pauseFight()">Play/Pause</button>
+    <button id="pauseBtn" (click)="pauseFight()">{{fight.isPaused ? "Start fight" : "Pause fight"}}</button>
     <button (click)="restartFight()">Restart fight</button>
   </div>
 </div>

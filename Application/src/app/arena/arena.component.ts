@@ -14,25 +14,17 @@ import { LineToLineMappedSource } from 'webpack-sources';
   encapsulation: ViewEncapsulation.None,
 })
 export class ArenaComponent {
-  topOpponent: Pokemon = undefined;
-  bottomOpponent: Pokemon = undefined;
-  fight: Fight = undefined;
-  fightInProgress: boolean = true;
+  topOpponent: Pokemon;
+  bottomOpponent: Pokemon;
+  fight: Fight;
   fightLogs: object[] = [];
-
   startDate: Date;
-
-  intervalIsPaused: boolean = false;
-
+  intervalIsPaused: boolean = true;
   topOpponentBlinking: string = 'block';
   bottomOpponentBlinking: string = 'block';
+  fightRoundInterval: NodeJS.Timer;
 
   constructor(private datePipe: DatePipe, private decimalPipe: DecimalPipe){
-    this.initFight();
-    this.startFight();
-  }
-
-  restartFight(): void {
     this.initFight();
     this.startFight();
   }
@@ -49,7 +41,7 @@ export class ArenaComponent {
 
     this.fight = new Fight(this.topOpponent, this.bottomOpponent);
     this.fightLogs = [];
-    this.fightInProgress = true;
+    this.intervalIsPaused = true;
   }
 
   private startFight(): void
@@ -66,52 +58,60 @@ export class ArenaComponent {
   
   private handleFight(attacker: Pokemon, attacked: Pokemon): void
   {
-    setTimeout(() => 
+    this.fightRoundInterval = setInterval(() => 
     {
-      const fightRoundInterval = setInterval(() => 
+      if(this.intervalIsPaused) return;
+
+      this.intervalIsPaused = true;
+
+      this.fight.fightProcess(attacker, attacked, this.fightLogs, (hasHit: boolean, damages: number, isDown: boolean) => 
       {
-        console.log(this.intervalIsPaused);
-
-        if(this.intervalIsPaused) return;
-
-        this.intervalIsPaused = true;
-
-        this.fight.fightProcess(attacker, attacked, this.fightLogs, (hasHit: boolean, damages: number, isDown: boolean) => 
+        if(hasHit === false)
         {
-          if(hasHit === false)
+          const tmpOpponent = attacker;
+          attacker = attacked;
+          attacked = tmpOpponent;
+
+          if(this.fight.isPaused) return;
+
+          return this.intervalIsPaused = false;
+        }
+
+        this.fight.fightAnimation(attacked, damages, () =>
+        {
+          if(isDown)
           {
-            const tmpOpponent = attacker;
-            attacker = attacked;
-            attacked = tmpOpponent;
-            return this.intervalIsPaused = false;
+            this.fightLogs.push({type : 'faint', pokemonName : attacked.name});
+            this.fightLogs.push({type : 'win', pokemonName : attacker.name});
+
+            return clearInterval(this.fightRoundInterval);
           }
+          
+          const tmpOpponent = attacker;
+          attacker = attacked;
+          attacked = tmpOpponent;
 
-          this.fight.fightAnimation(attacked, damages, () =>
-          {
-            if(isDown)
-            {
-              this.fightLogs.push({type : 'faint', pokemonName : attacked.name});
-              this.fightLogs.push({type : 'win', pokemonName : attacker.name});
+          if(this.fight.isPaused) return;
 
-              return clearInterval(fightRoundInterval);
-            }
-            
-            const tmpOpponent = attacker;
-            attacker = attacked;
-            attacked = tmpOpponent;
-            this.intervalIsPaused = false;
-          });
+          this.intervalIsPaused = false;
         });
-      }, 1000);
+      });
     }, 1000);
   }
 
   pauseFight() : void{
     if(this.fight.isPaused) {
       this.fight.isPaused = false;
-      this.startFight();
+      this.intervalIsPaused = false;
     } else {
       this.fight.isPaused = true;
+      this.intervalIsPaused = true;
     }
+  }  
+
+  restartFight(): void {
+    clearInterval(this.fightRoundInterval);
+    this.initFight();
+    this.startFight();
   }
 }
