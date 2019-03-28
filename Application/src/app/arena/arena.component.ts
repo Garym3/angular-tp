@@ -1,36 +1,35 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { formatDate, DatePipe, DecimalPipe } from '@angular/common';
 import {Pokemon} from '../pokemon/pokemon'
 import {Skill} from '../skill/skill'
 import {Fight} from '../fight/fight'
+import { LineToLineMappedSource } from 'webpack-sources';
 
 
 @Component({
   selector: 'app-arena',
   templateUrl: './arena.component.html',
   styleUrls: ['./arena.component.css'],
+  providers: [DatePipe, DecimalPipe],
   encapsulation: ViewEncapsulation.None,
 })
 export class ArenaComponent {
-  firstPokemon: Pokemon = undefined;
-  secondPokemon: Pokemon = undefined;
+  topOpponent: Pokemon = undefined;
+  bottomOpponent: Pokemon = undefined;
   fight: Fight = undefined;
   fightInProgress: boolean = true;
-  fightLogs: string[] = [""];
+  fightLogs: object[] = [];
 
-  constructor(){
+  startDate: Date;
+
+  intervalIsPaused: boolean = false;
+
+  topOpponentBlinking: string = 'block';
+  bottomOpponentBlinking: string = 'block';
+
+  constructor(private datePipe: DatePipe, private decimalPipe: DecimalPipe){
     this.initFight();
     this.startFight();
-  }
-
-  pauseFight() : void{
-    // this.fight.isPaused = this.fight.isPaused;
-
-    if(this.fight.isPaused) {
-      this.fight.isPaused = false;
-      this.startFight();
-    } else {
-      this.fight.isPaused = true;
-    }
   }
 
   restartFight(): void {
@@ -45,40 +44,74 @@ export class ArenaComponent {
     const vineWhip: Skill = new Skill('vine whip', 35, 100);
     const powerWhip: Skill = new Skill('power whip', 120, 85);
 
-    this.firstPokemon = new Pokemon("Bulbasaur", 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip]);
-    this.secondPokemon = new Pokemon("Pikachu", 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder]);
+    this.topOpponent = new Pokemon("Bulbasaur", 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip]);
+    this.bottomOpponent = new Pokemon("Pikachu", 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder]);
 
-    this.fight = new Fight(this.firstPokemon, this.secondPokemon);
-    this.fightLogs = [""];
+    this.fight = new Fight(this.topOpponent, this.bottomOpponent);
+    this.fightLogs = [];
     this.fightInProgress = true;
   }
 
   private startFight(): void
   {
-    this.fightLogs.push(`<div class="logsListElement">A fight begins between <span class="pokemon">${this.firstPokemon.name}</span> and <span class="pokemon">${this.secondPokemon.name}</span> !</div></br>`);
+    this.startDate = new Date();
+    this.fightLogs.push({type : 'start', topOpponent : this.topOpponent.name, bottomOpponent : this.bottomOpponent.name});
 
-    const firstToAttack: Pokemon = this.firstPokemon.speed >= this.secondPokemon.speed ? this.firstPokemon : this.secondPokemon;
-    const secondToAttack: Pokemon = this.firstPokemon.speed < this.secondPokemon.speed ? this.firstPokemon : this.secondPokemon;
+    const firstToAttack: Pokemon = this.topOpponent.speed >= this.bottomOpponent.speed ? this.topOpponent : this.bottomOpponent;
+    const secondToAttack: Pokemon = this.topOpponent.speed < this.bottomOpponent.speed ? this.topOpponent : this.bottomOpponent;
 
     this.handleFight(firstToAttack, secondToAttack);
   }
 
+  
   private handleFight(attacker: Pokemon, attacked: Pokemon): void
   {
-    setTimeout(() =>
+    setTimeout(() => 
     {
-      this.fight.fightAttack(attacker, attacked, (fightIsOver) =>
+      const fightRoundInterval = setInterval(() => 
       {
-        //this.fightLogs = this.fightLogs.concat(this.fight.logs);
+        console.log(this.intervalIsPaused);
 
-        if(fightIsOver == false)
+        if(this.intervalIsPaused) return;
+
+        this.intervalIsPaused = true;
+
+        this.fight.fightProcess(attacker, attacked, this.fightLogs, (hasHit: boolean, damages: number, isDown: boolean) => 
         {
-          this.handleFight(attacked, attacker);
-        }
+          if(hasHit === false)
+          {
+            const tmpOpponent = attacker;
+            attacker = attacked;
+            attacked = tmpOpponent;
+            return this.intervalIsPaused = false;
+          }
 
-        //return this.fightInProgress = !this.fight.isOver;
-      });
+          this.fight.fightAnimation(attacked, damages, () =>
+          {
+            if(isDown)
+            {
+              this.fightLogs.push({type : 'faint', pokemonName : attacked.name});
+              this.fightLogs.push({type : 'win', pokemonName : attacker.name});
 
+              return clearInterval(fightRoundInterval);
+            }
+            
+            const tmpOpponent = attacker;
+            attacker = attacked;
+            attacked = tmpOpponent;
+            this.intervalIsPaused = false;
+          });
+        });
+      }, 1000);
     }, 1000);
+  }
+
+  pauseFight() : void{
+    if(this.fight.isPaused) {
+      this.fight.isPaused = false;
+      this.startFight();
+    } else {
+      this.fight.isPaused = true;
+    }
   }
 }

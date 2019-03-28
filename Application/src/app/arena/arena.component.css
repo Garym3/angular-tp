@@ -14,7 +14,7 @@
 
 .logsListElement span{ font-weight:bold; }
 
-.logsListElement span.pokemon{ color:#759EB8; }
+.logsListElement span.pokemon, .logsListElement span.date{ color:#759EB8; }
 
 .logsListElement span.attack{ color:#5CB85C; }
 

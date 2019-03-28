@@ -1,7 +1,5 @@
 import {Pokemon} from '../pokemon/pokemon'
 import {Skill} from '../skill/skill'
-import { TimeInterval } from 'rxjs';
-import { callbackify } from 'util';
 
 export class Fight {
     firstOpponent: Pokemon = undefined;
@@ -110,40 +108,87 @@ export class Fight {
     /****************************************************************************************************/
     /****************************************************************************************************/
 
-    fightAttack(attackingOpponent: Pokemon, attackedOpponent: Pokemon, callback)
+    fightProcess(attackingOpponent: Pokemon, attackedOpponent: Pokemon, fightLogs: object[], callback: any)
     {
       const randomSkill: number = Math.round(Math.random());
 
-      document.getElementById('logsList').innerHTML +=  `<div class="logsListElement"><span class="pokemon">${attackingOpponent.name}</span> uses <span class="attack">${attackingOpponent.skills[randomSkill].name}</span></div>`;
+      fightLogs.push({type : 'attack', pokemonName : attackingOpponent.name, skillName : attackingOpponent.skills[randomSkill].name});
+
+      if(this.checkIfAttackHits(attackingOpponent.skills[randomSkill]) == false) 
+      {
+        fightLogs.push({type : 'miss', pokemonName : attackingOpponent.name});
+        return callback(false);
+      } 
+
+      const damages: number = this.calculateDamages(attackingOpponent, attackingOpponent.skills[randomSkill], attackedOpponent);
+
+      fightLogs.push({type : 'damages', pokemonName : attackedOpponent.name, damages : damages});
+
+      const isDown:boolean = attackedOpponent.health - damages <= 0;
+
+      return callback(true, damages, isDown);
+    }
+
+    /****************************************************************************************************/
+    /****************************************************************************************************/
+
+    fightAnimation(attacked: Pokemon, damages: number, callback: any)
+    {
+      const attackedCurrentHealth = attacked.health - damages  < 0 ? 0 : attacked.health - damages;
+      const totalTime = (attacked.maxHealth - attackedCurrentHealth) * 0.1 > 2 ? 2 : (attacked.maxHealth - attackedCurrentHealth) * 0.1;
+      const intervalTime = totalTime / (attacked.maxHealth - attackedCurrentHealth);
+
+      console.log(Math.floor(intervalTime * 1000));
+
+      const animationInterval = setInterval(() =>
+      {
+        if(attacked.health === attackedCurrentHealth)
+        {
+          clearInterval(animationInterval);
+          return callback();
+        }
+        
+        attacked.health -= 1;
+      }, Math.floor(intervalTime * 1000));
+    }
+    
+    /****************************************************************************************************/
+    /****************************************************************************************************/
+
+    fightAttack(attacker: Pokemon, attacked: Pokemon, callback)
+    {
+      const randomSkill: number = Math.round(Math.random());
+
+      document.getElementById('logsList').innerHTML +=  `<div class="logsListElement"><span class="pokemon">${attacker.name}</span> uses <span class="attack">${attacker.skills[randomSkill].name}</span></div>`;
       document.getElementById('logsList').scrollTop = document.getElementById('logsList').scrollHeight;
 
-      if(this.checkIfAttackHits(attackingOpponent.skills[randomSkill]) == false)
+      if(this.checkIfAttackHits(attacker.skills[randomSkill]) == false)
       {
-        document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attackingOpponent.name}</span> misses !</div></br>`;
+        document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attacker.name}</span> misses !</div></br>`;
         document.getElementById('logsList').scrollTop = document.getElementById('logsList').scrollHeight;
 
         setTimeout(() =>
         {
-          return this.fightAttack(attackedOpponent, attackingOpponent, callback);
+          return this.fightAttack(attacked, attacker, callback);
 
         }, 1000);
       }
 
       else
       {
-        const damages: number = this.calculateDamages(attackingOpponent, attackingOpponent.skills[randomSkill], attackedOpponent);
+        const damages: number = this.calculateDamages(attacker, attacker.skills[randomSkill], attacked);
 
-        document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attackedOpponent.name}</span> takes <span class="damages">${damages}</span> damages !</div></br>`;
+        document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attacked.name}</span> takes <span class="damages">${damages}</span> damages !</div></br>`;
         document.getElementById('logsList').scrollTop = document.getElementById('logsList').scrollHeight;
 
-        const newCurrentHp: number = attackedOpponent.health - damages < 0 ? 0 : attackedOpponent.health - damages;
+        const newCurrentHp: number = attacked.health - damages < 0 ? 0 : attacked.health - damages;
 
         var isTobeHidden: boolean = true;
         var blinkCounter: number = 0;
 
         const blinkInterval = setInterval(() =>
         {
-          if(attackedOpponent === this.firstOpponent)
+          if(attacked === this.firstOpponent)
           {
             isTobeHidden
             ? document.getElementById('topOpponentGif').style.display = 'none'
@@ -167,19 +212,19 @@ export class Fight {
 
         const takeOffHpInterval = setInterval(() =>
         {
-          attackedOpponent.health -= 1;
+          attacked.health -= 1;
 
-          if(attackedOpponent.health === newCurrentHp)
+          if(attacked.health === newCurrentHp)
           {
             clearInterval(takeOffHpInterval);
 
-            if(attackedOpponent.health === 0)
+            if(attacked.health === 0)
             {
-              document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attackedOpponent.name}</span> fainted !</div>`;
-              document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attackingOpponent.name}</span> wins !</div>`;
+              document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attacked.name}</span> fainted !</div>`;
+              document.getElementById('logsList').innerHTML += `<div class="logsListElement"><span class="pokemon">${attacker.name}</span> wins !</div>`;
               document.getElementById('logsList').scrollTop = document.getElementById('logsList').scrollHeight;
 
-              attackedOpponent === this.firstOpponent
+              attacked === this.firstOpponent
               ? document.getElementById('topOpponentGif').style.display = 'none'
               : document.getElementById('bottomOpponentGif').style.display = 'none';
 
