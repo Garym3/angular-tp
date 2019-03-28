@@ -4,13 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
+import { FightersMenuComponent } from './fightersMenu/fightersMenu.component';
 import { ArenaComponent } from './arena/arena.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArenaComponent,
-    MenuComponent
+    MenuComponent,
+    FightersMenuComponent
   ],
   imports: [
     BrowserModule,

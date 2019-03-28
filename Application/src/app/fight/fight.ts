@@ -1,5 +1,5 @@
-import {Pokemon} from '../pokemon/pokemon'
-import {Skill} from '../skill/skill'
+import {Pokemon} from '../classes/pokemon'
+import {Skill} from '../classes/skill'
 import { TimeInterval } from 'rxjs';
 import { callbackify } from 'util';
 

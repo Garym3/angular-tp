@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Pokemon } from '../classes/pokemon'
+
 /****************************************************************************************************/
 
 @Component(
 {
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  selector: 'app-fighters-menu',
+  templateUrl: './fightersMenu.component.html',
+  styleUrls: ['./fightersMenu.component.css']
 })
 
 /****************************************************************************************************/
 
-export class MenuComponent
+export class FightersMenuComponent
 {
+  firstFighter: Pokemon = null;
+  secondFighter: Pokemon = null;
+
   constructor(private router: Router){ }
 
-  redirectToOpponentsMenu(): void
+  redirectToMainMenu(): void
   {
-    this.router.navigateByUrl('/fighters-menu');
-  }
-
-  redirectToTestPage(): void
-  {
-    this.router.navigateByUrl('/arena');
+    this.router.navigateByUrl('/');
   }
 }
 
