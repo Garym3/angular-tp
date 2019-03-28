@@ -1,5 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { formatDate, DatePipe, DecimalPipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {Pokemon} from '../classes/pokemon'
 import {Skill} from '../classes/skill'
 import {Fight} from '../fight/fight'
@@ -9,8 +9,7 @@ import {Fight} from '../fight/fight'
   selector: 'app-arena',
   templateUrl: './arena.component.html',
   styleUrls: ['./arena.component.css'],
-  providers: [DatePipe, DecimalPipe],
-  encapsulation: ViewEncapsulation.None,
+  providers: [DatePipe, DecimalPipe]
 })
 export class ArenaComponent {
   topOpponent: Pokemon;
