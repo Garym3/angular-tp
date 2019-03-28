@@ -1,107 +1,119 @@
-<div id="wrapper">
-  <div id="container">
-    <div class="tools">
-      <button [className]="firstFighter !== null && secondFighter !== null ? 'toolsBegin' : 'toolsDisabled'" (click)="redirectToArena()">Enter the arena</button>
-      <button class="toolsReturn" (click)="redirectToMainMenu()">Back to main menu</button>
-    </div>
-    <div class="opponents">
-      <div class="opponentsSelected">
-        <div class="opponentsSelectedHeader">Current opponents selected</div>
-        <div class="opponentsSelectedContainer">
-          <div *ngIf="firstFighter === null; else firstFighterElse">
-            <div class="opponentsSelectedBlockEmpty">
-              <div class="opponentsSelectedBlockEmptyMessage">Fighter 1 not selected yet</div>
-            </div>
-          </div>
-          <ng-template #firstFighterElse>
-            <div class="opponentsSelectedBlock" (click)="firstFighter = null">
-              <div class="opponentsSelectedBlockRemove"></div>
-              <div class="opponentsSelectedBlockRemoveMessage">Click to remove this fighter</div>
-              <div class="opponentsSelectedBlockPicture">
-                <img src="{{firstFighter.frontPicture}}" />
-              </div>
-              <div class="opponentsSelectedBlockData">
-                <div class="opponentsSelectedBlockDataName">{{firstFighter.name}}</div>
-                <div class="opponentsSelectedBlockDataStats">
-                  <div class="opponentsSelectedBlockDataStatsLine">
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">HP :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.health}}</div>
-                    </div>
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Speed :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.speed}}</div>
-                    </div>
-                  </div>
-                  <div class="opponentsSelectedBlockDataStatsLine">
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Attack :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.attack}}</div>
-                    </div>
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Defense :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.defense}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-
-          <div *ngIf="secondFighter === null; else secondFighterElse">
-            <div class="opponentsSelectedBlockEmpty">
-              <div class="opponentsSelectedBlockEmptyMessage">Fighter 2 not selected yet</div>
-            </div>
-          </div>
-          <ng-template #secondFighterElse>
-            <div class="opponentsSelectedBlock" (click)="secondFighter = null">
-              <div class="opponentsSelectedBlockRemove"></div>
-              <div class="opponentsSelectedBlockRemoveMessage">Click to remove this fighter</div>
-              <div class="opponentsSelectedBlockPicture">
-                <img src="{{secondFighter.frontPicture}}" />
-              </div>
-              <div class="opponentsSelectedBlockData">
-                <div class="opponentsSelectedBlockDataName">{{secondFighter.name}}</div>
-                <div class="opponentsSelectedBlockDataStats">
-                  <div class="opponentsSelectedBlockDataStatsLine">
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">HP :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.health}}</div>
-                    </div>
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Speed :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.speed}}</div>
-                    </div>
-                  </div>
-                  <div class="opponentsSelectedBlockDataStatsLine">
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Attack :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.attack}}</div>
-                    </div>
-                    <div class="opponentsSelectedBlockDataStatsElement">
-                      <div class="opponentsSelectedBlockDataStatsElementKey">Defense :</div>
-                      <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.defense}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-
-        </div>
+<div *ngIf="isReadyToBeDisplayed === false; else displayPokemonList">
+  <div class="loaderWrapper">
+    <div class="loaderContainer">
+      <div class="loaderBlock">
+        <img src="../../assets/images/spinner.png" class="loaderSpinner" />
+        <div class="loaderMessage">Retrieving data from API. Please wait...</div>
       </div>
-      <div class="opponentsList">
-        <div class="opponentsListHeader">Pokemon list</div>
-        <div class="opponentsListContainer">
-          <div class="opponentsListContainerElement" *ngFor="let pokemon of fightersList">
-            <div class="opponentsListContainerElementPicture">
-              <img src="{{pokemon.frontPicture}}" />
+    </div>
+  </div>
+</div>
+<ng-template #displayPokemonList>
+  <div id="wrapper">
+    <div id="container">
+      <div class="tools">
+        <button [className]="firstFighter !== null && secondFighter !== null ? 'toolsBegin' : 'toolsDisabled'" (click)="redirectToArena()">Enter the arena</button>
+        <button class="toolsReturn" (click)="redirectToMainMenu()">Back to main menu</button>
+      </div>
+      <div class="opponents">
+        <div class="opponentsSelected">
+          <div class="opponentsSelectedHeader">Current opponents selected</div>
+          <div class="opponentsSelectedContainer">
+            <div *ngIf="firstFighter === null; else firstFighterElse">
+              <div class="opponentsSelectedBlockEmpty">
+                <div class="opponentsSelectedBlockEmptyMessage">Fighter 1 not selected yet</div>
+              </div>
             </div>
-            <div class="opponentsListContainerElementData">
-              <div class="opponentsListContainerElementDataName">{{pokemon.name}}</div>
-              <div class="opponentsListContainerElementDataButtons">
-                <button (click)="firstFighterSelected(pokemon)" [className]="firstFighter === null ? 'opponentsListContainerElementDataButtonsFirst' : 'opponentsListContainerElementDataButtonsDisabled'">Fighter 1</button>
-                <button (click)="secondFighterSelected(pokemon)" [className]="secondFighter === null ? 'opponentsListContainerElementDataButtonsSecond' : 'opponentsListContainerElementDataButtonsDisabled'">Fighter 2</button>
+            <ng-template #firstFighterElse>
+              <div class="opponentsSelectedBlock" (click)="firstFighter = null">
+                <div class="opponentsSelectedBlockRemove"></div>
+                <div class="opponentsSelectedBlockRemoveMessage">Click to remove this fighter</div>
+                <div class="opponentsSelectedBlockPicture">
+                  <img src="{{firstFighter.frontPicture}}" />
+                </div>
+                <div class="opponentsSelectedBlockData">
+                  <div class="opponentsSelectedBlockDataName">{{firstFighter.name}}</div>
+                  <div class="opponentsSelectedBlockDataStats">
+                    <div class="opponentsSelectedBlockDataStatsLine">
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">HP :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.health}}</div>
+                      </div>
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Speed :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.speed}}</div>
+                      </div>
+                    </div>
+                    <div class="opponentsSelectedBlockDataStatsLine">
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Attack :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.attack}}</div>
+                      </div>
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Defense :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{firstFighter.defense}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+            <div *ngIf="secondFighter === null; else secondFighterElse">
+              <div class="opponentsSelectedBlockEmpty">
+                <div class="opponentsSelectedBlockEmptyMessage">Fighter 2 not selected yet</div>
+              </div>
+            </div>
+            <ng-template #secondFighterElse>
+              <div class="opponentsSelectedBlock" (click)="secondFighter = null">
+                <div class="opponentsSelectedBlockRemove"></div>
+                <div class="opponentsSelectedBlockRemoveMessage">Click to remove this fighter</div>
+                <div class="opponentsSelectedBlockPicture">
+                  <img src="{{secondFighter.frontPicture}}" />
+                </div>
+                <div class="opponentsSelectedBlockData">
+                  <div class="opponentsSelectedBlockDataName">{{secondFighter.name}}</div>
+                  <div class="opponentsSelectedBlockDataStats">
+                    <div class="opponentsSelectedBlockDataStatsLine">
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">HP :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.health}}</div>
+                      </div>
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Speed :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.speed}}</div>
+                      </div>
+                    </div>
+                    <div class="opponentsSelectedBlockDataStatsLine">
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Attack :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.attack}}</div>
+                      </div>
+                      <div class="opponentsSelectedBlockDataStatsElement">
+                        <div class="opponentsSelectedBlockDataStatsElementKey">Defense :</div>
+                        <div class="opponentsSelectedBlockDataStatsElementValue">{{secondFighter.defense}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+          </div>
+        </div>
+        <div class="opponentsList">
+          <div class="opponentsListHeader">Pokemon list</div>
+          <div class="opponentsListContainer">
+            <div class="opponentsListContainerElement" *ngFor="let pokemon of fightersList">
+              <div class="opponentsListContainerElementPicture">
+                <img src="{{pokemon.frontPicture}}" />
+              </div>
+              <div class="opponentsListContainerElementData">
+                <div class="opponentsListContainerElementDataName">{{pokemon.name}}</div>
+                <div class="opponentsListContainerElementDataButtons">
+                  <button (click)="firstFighterSelected(pokemon)" [className]="firstFighter === null ? 'opponentsListContainerElementDataButtonsFirst' : 'opponentsListContainerElementDataButtonsDisabled'">Fighter 1</button>
+                  <button (click)="secondFighterSelected(pokemon)" [className]="secondFighter === null ? 'opponentsListContainerElementDataButtonsSecond' : 'opponentsListContainerElementDataButtonsDisabled'">Fighter 2</button>
+                </div>
               </div>
             </div>
           </div>
@@ -109,4 +121,4 @@
       </div>
     </div>
   </div>
-</div>
+</ng-template>

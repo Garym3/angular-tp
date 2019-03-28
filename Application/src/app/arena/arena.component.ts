@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {Pokemon} from '../classes/pokemon'
+import { PokedexService } from '../pokedex.service'
 import {Skill} from '../classes/skill'
 import {Fight} from '../fight/fight'
 
@@ -13,8 +14,8 @@ import {Fight} from '../fight/fight'
   providers: [DatePipe, DecimalPipe]
 })
 export class ArenaComponent {
-  topOpponent: Pokemon;
-  bottomOpponent: Pokemon;
+  topOpponent: Pokemon = null;
+  bottomOpponent: Pokemon = null;
   fight: Fight;
   fightLogs: object[] = [];
   startDate: Date;
@@ -23,27 +24,41 @@ export class ArenaComponent {
   bottomOpponentBlinking: string = 'block';
   fightRoundInterval: NodeJS.Timer;
 
-  constructor(private datePipe: DatePipe, private decimalPipe: DecimalPipe, route: ActivatedRoute)
+  constructor(private router: Router, private datePipe: DatePipe, private decimalPipe: DecimalPipe, private route: ActivatedRoute, private pokedexService: PokedexService)
   {
+    const thunder: Skill = new Skill('thunder', 120, 70);
+    const powerWhip: Skill = new Skill('power whip', 120, 85);
+
     route.queryParams.subscribe(params =>
     {
       const firstFighterId = params['first'];
       const secondFighterId = params['second'];
-    });
 
-    this.initFight();
-    this.startFight();
+      this.pokedexService.getPokemon(firstFighterId, (result) =>
+      {
+        this.topOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${firstFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${firstFighterId}.png`);
+
+        this.pokedexService.getPokemon(secondFighterId, (result) =>
+        {
+          this.bottomOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${secondFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${secondFighterId}.png`);
+
+          this.initFight();
+          this.startFight();
+        });
+      });
+    });
   }
 
-  private initFight(): void{
+  redirectToOpponentsMenu(): void
+  {
+    clearInterval(this.fightRoundInterval);
+    this.router.navigateByUrl('/fighters-menu');
+  }
 
-    const thundershock: Skill = new Skill('thundershock', 40, 100);
-    const thunder: Skill = new Skill('thunder', 120, 70);
-    const vineWhip: Skill = new Skill('vine whip', 35, 100);
-    const powerWhip: Skill = new Skill('power whip', 120, 85);
-
-    this.topOpponent = new Pokemon('Bulbasaur', 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip], '', '');
-    this.bottomOpponent = new Pokemon('Pikachu', 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder], '', '');
+  private initFight(): void
+  {
+    this.topOpponent.health = this.topOpponent.maxHealth;
+    this.bottomOpponent.health = this.bottomOpponent.maxHealth;
 
     this.fight = new Fight(this.topOpponent, this.bottomOpponent);
     this.fightLogs = [];
@@ -115,7 +130,10 @@ export class ArenaComponent {
     }
   }
 
-  restartFight(): void {
+  restartFight(): void
+  {
+    this.fight.isPaused = true;
+
     clearInterval(this.fightRoundInterval);
     this.initFight();
     this.startFight();

@@ -21,26 +21,45 @@ export class FightersMenuComponent
   firstFighter: Pokemon = null;
   secondFighter: Pokemon = null;
   fightersList: Pokemon[] = [];
+  isReadyToBeDisplayed: boolean = false;
 
   constructor(private router: Router, private pokedexService: PokedexService)
+  {
+    this.retrievePokemonListFromApi();
+  }
+
+  /****************************************************************************************************/
+  /****************************************************************************************************/
+
+  retrievePokemonListFromApi()
   {
     const thundershock: Skill = new Skill('thundershock', 40, 100);
     const thunder: Skill = new Skill('thunder', 120, 70);
     const vineWhip: Skill = new Skill('vine whip', 35, 100);
     const powerWhip: Skill = new Skill('power whip', 120, 85);
+    const tackle: Skill = new Skill('tackle', 50, 100);
 
-    const bulbasaur = new Pokemon('Bulbasaur', 1, 45, 45, 49, 49, 65, 45, [vineWhip, powerWhip], 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png');
-    const pikachu = new Pokemon('Pikachu', 1, 35, 90, 55, 55, 50, 50, [thundershock, thunder], 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png');
+    let index: number = 1;
 
-    this.fightersList.push(pikachu);
-    this.fightersList.push(bulbasaur);
-    
-    //TODO: Supposed to do a HTTP request to the pokéapi but isn't finished yet
-    /*pokedexService.getPokemons().subscribe(pokemons => {
-      this.firstFighter = pokemons[0];
-      this.secondFighter = pokemons[1];
-    });*/
+    const browseApi = () =>
+    {
+      this.pokedexService.getPokemon(index, (result) =>
+      {
+        const newPokemon = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [tackle, thundershock], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${index}.png`);
+
+        this.fightersList.push(newPokemon);
+
+        if((index += 1) <= 151) return browseApi();
+
+        this.isReadyToBeDisplayed = true;
+      });
+    }
+
+    browseApi();
   }
+
+  /****************************************************************************************************/
+  /****************************************************************************************************/
 
   redirectToMainMenu(): void
   {
@@ -54,7 +73,7 @@ export class FightersMenuComponent
   {
     if(this.firstFighter !== null && this.secondFighter !== null)
     {
-      this.router.navigateByUrl(`/arena?first=${1}&second=${2}`);
+      this.router.navigateByUrl(`/arena?first=${this.firstFighter.id}&second=${this.secondFighter.id}`);
     }
   }
 

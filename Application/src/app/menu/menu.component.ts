@@ -20,11 +20,6 @@ export class MenuComponent
   {
     this.router.navigateByUrl('/fighters-menu');
   }
-
-  redirectToTestPage(): void
-  {
-    this.router.navigateByUrl('/arena');
-  }
 }
 
 /****************************************************************************************************/

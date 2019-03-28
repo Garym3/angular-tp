@@ -2,6 +2,7 @@ import { Skill } from './skill'
 
 export class Pokemon
 {
+  id: number;
   name: string;
   level: number;
   health: number;
@@ -16,8 +17,9 @@ export class Pokemon
   frontPicture: string;
   backPicture: string;
 
-  constructor(name: string, level: number, health: number, speed: number, attack: number, defense: number, specialAttack: number, specialDefense: number, skills: Skill[], frontPicture: string, backPicture: string)
+  constructor(id: number, name: string, level: number, health: number, speed: number, attack: number, defense: number, specialAttack: number, specialDefense: number, skills: Skill[], frontPicture: string, backPicture: string)
   {
+    this.id = id;
     this.name = `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`;
     this.level = level < 1 ? 1 : level > 100 ? 100 : level;
     this.health = health < 1 ? 1 : health > 999 ? 999 : health;

@@ -1,67 +1,82 @@
-<div id="wrapper">
-  <div class="fightContainer">
-    <img src="../../assets/images/background.jpg" class="fightContainerBackground" />
-    <div class="fightInnerContainer">
-      <div class="fightTopOpponent">
-        <div class="fightOpponentInfo">
-          <div id="topOpponentName" class="fightOpponentInfoName">{{topOpponent.name}}</div>
-          <div class="fightOpponentInfoHealth">
-            <div id="topOpponentHealthFiller" [ngStyle]="{'width.%': (topOpponent.health * 100) / topOpponent.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
-            <div id="topOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{topOpponent.health}} / {{topOpponent.maxHealth}} HP</div>
-          </div>
-        </div>
-        <div class="fightTopOpponentGif">
-          <img id="topOpponentGif" [ngStyle]="{'display': topOpponentBlinking}" src="../../assets/images/animated/bulbasaur_front.gif" />
-        </div>
-      </div>
-      <div class="fightBottomOpponent">
-        <div class="fightBottomOpponentGif">
-          <img id="bottomOpponentGif" [ngStyle]="{'display': bottomOpponentBlinking}" src="../../assets/images/animated/pikachu_back.gif" />
-        </div>
-        <div class="fightOpponentInfo">
-          <div id="bottomOpponentName" class="fightOpponentInfoName">{{bottomOpponent.name}}</div>
-          <div class="fightOpponentInfoHealth">
-            <div id="bottomOpponentHealthFiller" [ngStyle]="{'width.%': (bottomOpponent.health * 100) / bottomOpponent.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
-            <div id="bottomOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{bottomOpponent.health}} / {{bottomOpponent.maxHealth}} HP</div>
-          </div>
-        </div>
+<div *ngIf="topOpponent === null || bottomOpponent === null; else displayArenaContent">
+  <div class="loaderWrapper">
+    <div class="loaderContainer">
+      <div class="loaderBlock">
+        <img src="../../assets/images/spinner.png" class="loaderSpinner" />
+        <div class="loaderMessage">Preparing arena. Please wait...</div>
       </div>
     </div>
-  </div>
-  <div class="logsContainer">
-    <div class="logsContainerTitle">Fight progress</div>
-    <div class="logsContainerList" id="logsList">
-      <div class="logsListElement">
-        Fight begins at <span class="date">{{startDate | date:'h:mm:ss a'}}</span>
-      </div><br>
-      <div class="logsListElement" *ngFor="let element of fightLogs.reverse()">
-        <div [ngSwitch]="element.type">
-          <div *ngSwitchCase="'start'">
-            A fight begins between <span class="pokemon">{{element.topOpponent}}</span> and <span class="pokemon">{{element.bottomOpponent}}</span>!
-          </div>
-          <div *ngSwitchCase="'attack'">
-            <span class="pokemon">{{element.pokemonName}}</span> uses <span class="attack">{{element.skillName}}</span>!
-          </div>
-          <div *ngSwitchCase="'miss'">
-            <span class="pokemon">{{element.pokemonName}}</span> misses!
-          </div>
-          <div *ngSwitchCase="'damages'">
-            <span class="pokemon">{{element.pokemonName}}</span> takes <span class="damages">{{element.damages}}</span> damages!
-          </div>
-          <div *ngSwitchCase="'faint'">
-            <span class="pokemon">{{element.pokemonName}}</span> fainted!
-          </div>
-          <div *ngSwitchCase="'win'">
-              <span class="pokemon">{{element.pokemonName}}</span> wins!
-          </div>
-          <br *ngSwitchCase="'start'">
-          <br *ngSwitchCase="'miss'">
-          <br *ngSwitchCase="'damages'">
-          <br *ngSwitchCase="'faint'">
-        </div>
-      </div>
-    </div>
-    <button id="pauseBtn" [className]="fight.isPaused ? 'startButton' : 'pauseButton'" (click)="pauseFight()">{{fight.isPaused ? "Start fight" : "Pause fight"}}</button>
-    <button class="restartButton" (click)="restartFight()">Restart fight</button>
   </div>
 </div>
+<ng-template #displayArenaContent>
+  <div id="wrapper">
+    <div class="fightContainer">
+      <img src="../../assets/images/background.jpg" class="fightContainerBackground" />
+      <div class="fightInnerContainer">
+        <div class="fightTopOpponent">
+          <div class="fightOpponentInfo">
+            <div id="topOpponentName" class="fightOpponentInfoName">{{topOpponent.name}}</div>
+            <div class="fightOpponentInfoHealth">
+              <div id="topOpponentHealthFiller" [ngStyle]="{'width.%': (topOpponent.health * 100) / topOpponent.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
+              <div id="topOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{topOpponent.health}} / {{topOpponent.maxHealth}} HP</div>
+            </div>
+          </div>
+          <div class="fightTopOpponentGif">
+            <img id="topOpponentGif" [ngStyle]="{'display': topOpponentBlinking}" src="https://play.pokemonshowdown.com/sprites/xyani/{{topOpponent.name.toLowerCase()}}.gif" />
+          </div>
+        </div>
+        <div class="fightBottomOpponent">
+          <div class="fightBottomOpponentGif">
+            <img id="bottomOpponentGif" [ngStyle]="{'display': bottomOpponentBlinking}" src="https://play.pokemonshowdown.com/sprites/xyani-back/{{bottomOpponent.name.toLowerCase()}}.gif" />
+          </div>
+          <div class="fightOpponentInfo">
+            <div id="bottomOpponentName" class="fightOpponentInfoName">{{bottomOpponent.name}}</div>
+            <div class="fightOpponentInfoHealth">
+              <div id="bottomOpponentHealthFiller" [ngStyle]="{'width.%': (bottomOpponent.health * 100) / bottomOpponent.maxHealth}" class="fightOpponentInfoHealthFiller"></div>
+              <div id="bottomOpponentHealthStatus" class="fightOpponentInfoHealthStatus">{{bottomOpponent.health}} / {{bottomOpponent.maxHealth}} HP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="logsContainer">
+      <div class="logsContainerTitle">Fight progress</div>
+      <div class="logsContainerList" id="logsList">
+        <div class="logsListElement">
+          Fight begins at <span class="date">{{startDate | date:'h:mm:ss a'}}</span>
+        </div><br>
+        <div class="logsListElement" *ngFor="let element of fightLogs.reverse()">
+          <div [ngSwitch]="element.type">
+            <div *ngSwitchCase="'start'">
+              A fight begins between <span class="pokemon">{{element.topOpponent}}</span> and <span class="pokemon">{{element.bottomOpponent}}</span>!
+            </div>
+            <div *ngSwitchCase="'attack'">
+              <span class="pokemon">{{element.pokemonName}}</span> uses <span class="attack">{{element.skillName}}</span>!
+            </div>
+            <div *ngSwitchCase="'miss'">
+              <span class="pokemon">{{element.pokemonName}}</span> misses!
+            </div>
+            <div *ngSwitchCase="'damages'">
+              <span class="pokemon">{{element.pokemonName}}</span> takes <span class="damages">{{element.damages}}</span> damages!
+            </div>
+            <div *ngSwitchCase="'faint'">
+              <span class="pokemon">{{element.pokemonName}}</span> fainted!
+            </div>
+            <div *ngSwitchCase="'win'">
+                <span class="pokemon">{{element.pokemonName}}</span> wins!
+            </div>
+            <br *ngSwitchCase="'start'">
+            <br *ngSwitchCase="'miss'">
+            <br *ngSwitchCase="'damages'">
+            <br *ngSwitchCase="'faint'">
+          </div>
+        </div>
+      </div>
+      <div class="logsContainerButtons">
+        <button id="pauseBtn" [className]="fight.isPaused ? 'startButton' : 'pauseButton'" (click)="pauseFight()">{{fight.isPaused ? "Start fight" : "Pause fight"}}</button>
+        <button class="restartButton" (click)="restartFight()">Restart fight</button>
+        <button class="returnButton" (click)="redirectToOpponentsMenu()">Return</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
