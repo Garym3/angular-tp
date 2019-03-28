@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <button id="pauseBtn" (click)="pauseFight()">{{fight.isPaused ? "Start fight" : "Pause fight"}}</button>
-    <button (click)="restartFight()">Restart fight</button>
+    <button id="pauseBtn" [className]="fight.isPaused ? 'startButton' : 'pauseButton'" (click)="pauseFight()">{{fight.isPaused ? "Start fight" : "Pause fight"}}</button>
+    <button class="restartButton" (click)="restartFight()">Restart fight</button>
   </div>
 </div>

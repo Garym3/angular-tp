@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Pokemon } from '../classes/pokemon'
+import { PokedexService } from '../pokedex.service'
 
 /****************************************************************************************************/
 
@@ -19,7 +20,13 @@ export class FightersMenuComponent
   firstFighter: Pokemon = null;
   secondFighter: Pokemon = null;
 
-  constructor(private router: Router){ }
+  constructor(private router: Router, private pokedexService: PokedexService)
+  {
+    pokedexService.getPokemons().subscribe(pokemons => {
+      this.firstFighter = pokemons[0];
+      this.secondFighter = pokemons[1];
+    });
+  }
 
   redirectToMainMenu(): void
   {
