@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Pokemon } from '../classes/pokemon'
+import { PokedexService } from '../pokedex.service'
 import { Skill } from '../classes/skill'
 
 /****************************************************************************************************/
@@ -21,7 +22,7 @@ export class FightersMenuComponent
   secondFighter: Pokemon = null;
   fightersList: Pokemon[] = [];
 
-  constructor(private router: Router)
+  constructor(private router: Router, private pokedexService: PokedexService)
   {
     const thundershock: Skill = new Skill('thundershock', 40, 100);
     const thunder: Skill = new Skill('thunder', 120, 70);
@@ -33,6 +34,12 @@ export class FightersMenuComponent
 
     this.fightersList.push(pikachu);
     this.fightersList.push(bulbasaur);
+    
+    //TODO: Supposed to do a HTTP request to the pokéapi but isn't finished yet
+    /*pokedexService.getPokemons().subscribe(pokemons => {
+      this.firstFighter = pokemons[0];
+      this.secondFighter = pokemons[1];
+    });*/
   }
 
   redirectToMainMenu(): void

@@ -7,6 +7,9 @@ import { MenuComponent } from './menu/menu.component';
 import { FightersMenuComponent } from './fightersMenu/fightersMenu.component';
 import { ArenaComponent } from './arena/arena.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { PokedexService } from './pokedex.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,9 +19,10 @@ import { ArenaComponent } from './arena/arena.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [PokedexService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
