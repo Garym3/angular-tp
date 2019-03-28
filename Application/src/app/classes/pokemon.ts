@@ -13,8 +13,10 @@ export class Pokemon
   maxHealth: number;
   mainColor: string;
   skills: Skill[];
+  frontPicture: string;
+  backPicture: string;
 
-  constructor(name: string, level: number, health: number, speed: number, attack: number, defense: number, specialAttack: number, specialDefense: number, skills: Skill[])
+  constructor(name: string, level: number, health: number, speed: number, attack: number, defense: number, specialAttack: number, specialDefense: number, skills: Skill[], frontPicture: string, backPicture: string)
   {
     this.name = `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`;
     this.level = level < 1 ? 1 : level > 100 ? 100 : level;
@@ -26,5 +28,7 @@ export class Pokemon
     this.specialDefense = specialDefense < 1 ? 1 : specialDefense > 999 ? 999 : specialDefense;
     this.maxHealth = this.health;
     this.skills = skills;
+    this.frontPicture = frontPicture;
+    this.backPicture = backPicture;
   }
 }
