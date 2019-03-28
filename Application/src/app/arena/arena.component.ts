@@ -1,9 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { formatDate, DatePipe, DecimalPipe } from '@angular/common';
-import {Pokemon} from '../pokemon/pokemon'
-import {Skill} from '../skill/skill'
+import {Pokemon} from '../classes/pokemon'
+import {Skill} from '../classes/skill'
 import {Fight} from '../fight/fight'
-import { LineToLineMappedSource } from 'webpack-sources';
 
 
 @Component({

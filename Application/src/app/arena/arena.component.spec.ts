@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ArenaComponent } from './arena.component';
-import { Pokemon } from "../pokemon/pokemon";
+import { Pokemon } from "../classes/pokemon";
 import { Fight } from "../fight/fight";
 
 describe('ArenaComponent', () => {
