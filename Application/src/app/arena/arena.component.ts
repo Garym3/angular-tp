@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import {Pokemon} from '../classes/pokemon'
-import { PokedexService } from '../pokedex.service'
-import {Skill} from '../classes/skill'
-import {Fight} from '../fight/fight'
+import { Observable } from 'rxjs';
+
+import { Pokemon } from '../classes/pokemon';
+import { PokedexService } from '../services/pokedex.service';
+import { Skill } from '../classes/skill';
+import { Fight } from '../fight/fight';
 
 
 @Component({
@@ -13,32 +15,37 @@ import {Fight} from '../fight/fight'
   styleUrls: ['./arena.component.css'],
   providers: [DatePipe, DecimalPipe]
 })
-export class ArenaComponent {
+export class ArenaComponent implements OnInit {
   topOpponent: Pokemon = null;
   bottomOpponent: Pokemon = null;
   fight: Fight;
   fightLogs: object[] = [];
   startDate: Date;
   intervalIsPaused: boolean = true;
+  rounds: Observable<Array<any>>;
   topOpponentBlinking: string = 'block';
   bottomOpponentBlinking: string = 'block';
   fightRoundInterval: NodeJS.Timer;
 
-  constructor(private router: Router, private datePipe: DatePipe, private decimalPipe: DecimalPipe, private route: ActivatedRoute, private pokedexService: PokedexService)
+  constructor(private router: Router, private route: ActivatedRoute, private pokedexService: PokedexService)
   {
+
+  }
+
+  ngOnInit(): void {
     const thunder: Skill = new Skill('thunder', 120, 70);
     const powerWhip: Skill = new Skill('power whip', 120, 85);
 
-    route.queryParams.subscribe(params =>
+    this.route.queryParams.subscribe(params =>
     {
       const firstFighterId = params['first'];
       const secondFighterId = params['second'];
 
-      this.pokedexService.getPokemon(firstFighterId, (result) =>
+      this.pokedexService.getPokemon(firstFighterId).subscribe((result) =>
       {
         this.topOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${firstFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${firstFighterId}.png`);
 
-        this.pokedexService.getPokemon(secondFighterId, (result) =>
+        this.pokedexService.getPokemon(secondFighterId).subscribe((result) =>
         {
           this.bottomOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${secondFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${secondFighterId}.png`);
 
@@ -77,8 +84,18 @@ export class ArenaComponent {
   }
 
 
-  private handleFight(attacker: Pokemon, attacked: Pokemon): void
+  private handleFight(attacker: Pokemon, attacked: Pokemon)
   {
+    this.rounds = new Observable(subscriber => 
+    {
+      const interval = setInterval(() => subscriber.next(), 1000);
+      return () =>
+      {
+        subscriber.complete();
+        clearInterval(interval);
+      };
+    });
+
     this.fightRoundInterval = setInterval(() =>
     {
       if(this.intervalIsPaused) return;

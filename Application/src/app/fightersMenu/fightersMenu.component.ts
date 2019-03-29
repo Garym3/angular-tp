@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Pokemon } from '../classes/pokemon'
-import { PokedexService } from '../pokedex.service'
+import { PokedexService } from '../services/pokedex.service'
 import { Skill } from '../classes/skill'
 
 /****************************************************************************************************/
@@ -16,7 +16,7 @@ import { Skill } from '../classes/skill'
 
 /****************************************************************************************************/
 
-export class FightersMenuComponent
+export class FightersMenuComponent implements OnInit
 {
   firstFighter: Pokemon = null;
   secondFighter: Pokemon = null;
@@ -25,13 +25,16 @@ export class FightersMenuComponent
 
   constructor(private router: Router, private pokedexService: PokedexService)
   {
-    this.retrievePokemonListFromApi();
+  }
+
+  ngOnInit(): void {
+    this.getPokemonsFromApi();
   }
 
   /****************************************************************************************************/
   /****************************************************************************************************/
 
-  retrievePokemonListFromApi()
+  getPokemonsFromApi()
   {
     const thundershock: Skill = new Skill('thundershock', 40, 100);
     const thunder: Skill = new Skill('thunder', 120, 70);
@@ -43,15 +46,15 @@ export class FightersMenuComponent
 
     const browseApi = () =>
     {
-      this.pokedexService.getPokemon(index, (result) =>
+      this.pokedexService.getPokemon(index).subscribe((result) => 
       {
-        const newPokemon = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [tackle, thundershock], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${index}.png`);
+          const newPokemon = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [tackle, thundershock], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${index}.png`);
 
-        this.fightersList.push(newPokemon);
+          this.fightersList.push(newPokemon);
 
-        if((index += 1) <= 151) return browseApi();
+          if((index += 1) <= 151) return browseApi();
 
-        this.isReadyToBeDisplayed = true;
+          this.isReadyToBeDisplayed = true;
       });
     }
 

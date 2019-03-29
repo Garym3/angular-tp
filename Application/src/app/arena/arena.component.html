@@ -57,7 +57,7 @@
               <span class="pokemon">{{element.pokemonName}}</span> misses!
             </div>
             <div *ngSwitchCase="'damages'">
-              <span class="pokemon">{{element.pokemonName}}</span> takes <span class="damages">{{element.damages}}</span> damages!
+              <span class="pokemon">{{element.pokemonName}}</span> takes <span class="damages">{{element.damages | number}}</span> damages!
             </div>
             <div *ngSwitchCase="'faint'">
               <span class="pokemon">{{element.pokemonName}}</span> fainted!

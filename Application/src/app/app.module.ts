@@ -8,7 +8,7 @@ import { FightersMenuComponent } from './fightersMenu/fightersMenu.component';
 import { ArenaComponent } from './arena/arena.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { PokedexService } from './pokedex.service';
+import { PokedexService } from './services/pokedex.service';
 
 @NgModule({
   declarations: [
