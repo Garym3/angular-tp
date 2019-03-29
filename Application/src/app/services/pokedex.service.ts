@@ -39,7 +39,7 @@ export class PokedexService
     const powerWhip: Skill = new Skill('power whip', 120, 85);
     const tackle: Skill = new Skill('tackle', 50, 100);
 
-    if(this.pokemonList[id] !== undefined) return of(this.pokemonList[id]);
+    if(this.pokemonList[id] !== undefined) return of(this.pokemonList[id].pokemon);
 
     return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(map((result: any):Pokemon =>
     {
@@ -58,7 +58,7 @@ export class PokedexService
         `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${id}.png`
       );
 
-      this.pokemonList[id] = { pokemon: newPokemon};
+      this.pokemonList[id] = { pokemon: newPokemon };
 
       return newPokemon;
     }));
