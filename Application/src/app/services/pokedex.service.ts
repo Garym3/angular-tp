@@ -26,7 +26,7 @@ export class PokedexService
 
   getPokemonList(limit: number): Observable<Pokemon[]>
   {
-    const arrayOfObservable = [...new Array(limit)].fill().map((_, index) => this.getPokemon(index + 1));
+    const arrayOfObservable = [...new Array(limit)].fill(null).map((_, index) => this.getPokemon(index + 1));
 
     return zip(...arrayOfObservable);
   }

@@ -14,7 +14,7 @@
         <div class="createBlockFormData">
           <div class="createBlockFormDataLabel">HP :</div>
           <input type="number" #healthInput="ngModel" [(ngModel)]="pokemonHealth" name="health" placeholder="Enter pokemon HP" />
-          <div class="createBlockFormDataError" [hidden]="healthInput.valid">Pokemon HP is not valid (must be from 1 to 999)</div>
+          <div class="createBlockFormDataError" [hidden]="healthInput.errors?.required">Pokemon HP is not valid (must be from 1 to 999)</div>
         </div>
         <div class="createBlockFormData">
           <div class="createBlockFormDataLabel">Speed :</div>
