@@ -46,17 +46,17 @@ describe('ArenaComponent', () => {
     expect(fastestPokemon.speed >= slowestPokemon.speed).toBe(true);
   });
 
-  it('Should pause fight', () => {
+  // it('Should pause fight', () => {
 
-  });
+  // });
 
-  it('Should resume fight', () => {
+  // it('Should resume fight', () => {
 
-  });
+  // });
 
-  it('Should restart fight', () => {
+  // it('Should restart fight', () => {
 
-  });
+  // });
 
   // test("Pokemon should have a name", () => {
   //   const pokemon = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
