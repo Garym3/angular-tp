@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,18 +10,21 @@ import { ArenaComponent } from './arena/arena.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { PokedexService } from './services/pokedex.service';
+import { CreatePokemonComponent } from './createPokemon/createPokemon.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArenaComponent,
     MenuComponent,
-    FightersMenuComponent
+    FightersMenuComponent,
+    CreatePokemonComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [PokedexService],
   bootstrap: [AppComponent]

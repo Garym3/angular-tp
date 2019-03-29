@@ -20,6 +20,11 @@ export class MenuComponent
   {
     this.router.navigateByUrl('/fighters-menu');
   }
+
+  redirectToCreatePokemon(): void
+  {
+    this.router.navigateByUrl('/create-pokemon');
+  }
 }
 
 /****************************************************************************************************/

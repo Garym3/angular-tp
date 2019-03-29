@@ -22,12 +22,12 @@
             </div>
           </div>
           <div class="fightTopOpponentGif">
-            <img id="topOpponentGif" [ngStyle]="{'display': topOpponentBlinking}" src="https://play.pokemonshowdown.com/sprites/xyani/{{topOpponent.name.toLowerCase()}}.gif" />
+            <img id="topOpponentGif" [ngStyle]="topOpponent.health === 0 && {'display':'none'} || {display:block}" src="https://play.pokemonshowdown.com/sprites/xyani/{{topOpponent.name.toLowerCase()}}.gif" />
           </div>
         </div>
         <div class="fightBottomOpponent">
           <div class="fightBottomOpponentGif">
-            <img id="bottomOpponentGif" [ngStyle]="{'display': bottomOpponentBlinking}" src="https://play.pokemonshowdown.com/sprites/xyani-back/{{bottomOpponent.name.toLowerCase()}}.gif" />
+            <img id="bottomOpponentGif" [ngStyle]="bottomOpponent.health === 0 && {'display':'none'} || {display:block}" src="https://play.pokemonshowdown.com/sprites/xyani-back/{{bottomOpponent.name.toLowerCase()}}.gif" />
           </div>
           <div class="fightOpponentInfo">
             <div id="bottomOpponentName" class="fightOpponentInfoName">{{bottomOpponent.name}}</div>

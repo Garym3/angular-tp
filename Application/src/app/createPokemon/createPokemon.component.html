@@ -1,0 +1,41 @@
+<div id="wrapper">
+  <div id="container">
+    <div class="returnBlock">
+      <button class="returnBlockButton" (click)="redirectToMainMenu()">Return to menu</button>
+    </div>
+    <div class="createBlock">
+      <div class="createBlockHeader">Create your Pokemon</div>
+      <form (submit)="saveForm()" class="createBlockForm" #pokemonForm="ngForm" novalidate>
+        <div class="createBlockFormData">
+          <div class="createBlockFormDataLabel">Name :</div>
+          <input type="text" #nameInput="ngModel" [(ngModel)]="pokemonName" name="name" placeholder="Enter pokemon name" />
+          <div class="createBlockFormDataError" [hidden]="nameInput.valid">Pokemon name is not valid (must only contain )</div>
+        </div>
+        <div class="createBlockFormData">
+          <div class="createBlockFormDataLabel">HP :</div>
+          <input type="number" #healthInput="ngModel" [(ngModel)]="pokemonHealth" name="health" placeholder="Enter pokemon HP" />
+          <div class="createBlockFormDataError" [hidden]="healthInput.valid">Pokemon HP is not valid (must be from 1 to 999)</div>
+        </div>
+        <div class="createBlockFormData">
+          <div class="createBlockFormDataLabel">Speed :</div>
+          <input type="number" #speedInput="ngModel" [(ngModel)]="pokemonSpeed" name="speed" placeholder="Enter pokemon speed" />
+          <div class="createBlockFormDataError" [hidden]="speedInput.valid">Pokemon speed is not valid (must be from 1 to 999)</div>
+        </div>
+        <div class="createBlockFormData">
+          <div class="createBlockFormDataLabel">Attack :</div>
+          <input type="number" #attackInput="ngModel" [(ngModel)]="pokemonAttack" name="attack" placeholder="Enter pokemon attack" />
+          <div class="createBlockFormDataError" [hidden]="attackInput.valid">Pokemon attack is not valid (must be from 1 to 999)</div>
+        </div>
+        <div class="createBlockFormData">
+          <div class="createBlockFormDataLabel">Defense :</div>
+          <input type="number" #defenseInput="ngModel" [(ngModel)]="pokemonDefense" name="defense" placeholder="Enter pokemon defense" />
+          <div class="createBlockFormDataError" [hidden]="defenseInput.valid">Pokemon defense is not valid (must be from 1 to 999)</div>
+        </div>
+        <div class="createBlockFormButtons">
+          <button type="submit" class="createBlockFormButtonsSubmit">Create Pokemon</button>
+          <button type="reset" class="createBlockFormButtonsReset">Reset form</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
