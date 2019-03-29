@@ -1,28 +1,30 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RouterModule } from '@angular/router';
+import { RouterModule, } from '@angular/router';
 
-import { MenuComponent } from './menu.component';
+import { FightersMenuComponent } from './fightersMenu.component';
+import { HttpClientModule } from '@angular/common/http';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('FightersMenuComponent', () => {
+  let component: FightersMenuComponent;
+  let fixture: ComponentFixture<FightersMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        RouterModule
+        RouterModule,
+        HttpClientModule
       ],
       imports: [
         RouterTestingModule
       ],
-      declarations: [ MenuComponent ]
+      declarations: [ FightersMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(FightersMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

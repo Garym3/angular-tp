@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -30,68 +30,61 @@ describe('ArenaComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 
-  it('Should start fight with 2 opponents on init', () => {
-    expect(component.topOpponent === null).toBe(true)
-    expect(component.bottomOpponent === null).toBe(true)
-  });
+  // it('#pauseFight() should switch pause button\' state', () => {
+  //   fixture.detectChanges();
+  //   let button = fixture.nativeElement.querySelector('#pauseBtn')
+  //   expect(document.querySelector("#pauseBtn").textContent === "Start fight").toBe(true);
 
-  it('Fastest Pokémon should attack first', () => {
-    const fastestPokemon: Pokemon = component.fight.getFastest();
-    const slowestPokemon: Pokemon = component.fight.getSlowest();
+  //   button.click();
+  //   fixture.detectChanges();
     
-    expect(fastestPokemon.speed >= slowestPokemon.speed).toBe(true);
-  });
+  //   expect(document.querySelector("#pauseBtn").textContent === "Pause fight").toBe(true);
 
-  // it('Should pause fight', () => {
-
+  //   button.click();
+  //   fixture.detectChanges();
+    
+  //   expect(document.querySelector("#pauseBtn").textContent === "Start fight").toBe(true);
   // });
 
-  // it('Should resume fight', () => {
+  // it('#restartFight() should restart the fight', () => {
+  //   component.ngOnInit();
 
+  //   // Start the fight if it's paused (is paused by default)
+  //   component.pauseFight();
+
+  //   const initialFight: Fight = component.fight;
+
+  //   component.restartFight();
+
+  //   const currentFight: Fight = component.fight;
+
+  //   expect(initialFight === currentFight).toBe(false);
   // });
 
-  // it('Should restart fight', () => {
+  // it('#restartFight() should clear logs after restarting the fight', () => {
+  //   component.ngOnInit();
 
+  //   // Start the fight if it's paused (is paused by default)
+  //   component.pauseFight();
+
+  //   const initialFightLogs: object[] = component.fightLogs;
+
+  //   component.restartFight();
+
+  //   const currentFightLogs: object[] = component.fightLogs;
+
+  //   expect(initialFightLogs === currentFightLogs).toBe(false);
   // });
 
-  // test("Pokemon should have a name", () => {
-  //   const pokemon = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //   expect(pokemon.name !== undefined && pokemon.name.length > 0).toBe(true);
-  // });
+  // it('#redirectToOpponentsMenu() should redirect to opponentsMenu', fakeAsync(() => {
+  //   component.ngOnInit();
 
-  // test("Pokemon should not have a name", () => {
-  //     const pokemon = new Pokemon("", 100, 90, 50, 40, 50, 50);
-  //     expect(pokemon.name === undefined || pokemon.name.length <= 0).toBe(true);
-  // });
-
-  // test("Fight should start", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const bulbizar = new Pokemon("Bulbizar", 100, 45, 65, 49, 65, 45);
-  //     const fight = new Fight(pickachu, bulbizar);
-  //     fight.start();
-
-  //     expect(fight.hasStarted).toBe(true);
-  // });
-
-  // test("Pikachu should have lost", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const charizard = new Pokemon("Charizard", 100, 100, 109, 78, 85, 109);
-  //     const fight = new Fight(pickachu, charizard);
-
-  //     fight.start();
-  //     expect(fight.isOver).toBe(true);
-  //     expect(fight.winner === charizard).toBe(true);
-  // });
-
-  // test("No riposte before fight has started", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const charizard = new Pokemon("Charizard", 100, 100, 109, 78, 85, 109);
-  //     const fight = new Fight(pickachu, charizard);
-
-  //     expect(fight.riposte()).toBe(true);
-  // });
+  //   component.redirectToOpponentsMenu();
+  //   tick();
+  //   expect(location.pathname).toBe('/fighters-menu');
+  // }));
 });

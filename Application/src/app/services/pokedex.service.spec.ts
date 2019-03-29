@@ -6,13 +6,18 @@ import { Pokemon } from '../classes/pokemon';
 import { Skill } from '../classes/skill';
 
 describe('PokedexService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule],
-    providers: [PokedexService]
-  }));
+  let pokedexService: PokedexService;
 
-  it('should return Bulbasaur as a Pokemon', async(() => {
-    const pokedexService: PokedexService = TestBed.get(PokedexService);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [PokedexService]
+    });
+
+    pokedexService = TestBed.get(PokedexService);
+  });
+
+  it('#getPokemon should return Bulbasaur as a Pokémon', async(() => {
     const http = TestBed.get(HttpTestingController);
     const thunder: Skill = new Skill('thunder', 120, 70);
     const powerWhip: Skill = new Skill('power whip', 120, 85);
@@ -22,8 +27,14 @@ describe('PokedexService', () => {
     pokedexService.getPokemon(id).subscribe((pokemon: Pokemon) =>
     {
       expect(pokemon.name).toBe("Bulbasaur");
+      
     });
 
     http.expectOne(`${pokedexService.baseUrl}/${id}`).flush(mockedPokemon);
   }));
+
+  it('Base URL should be defined', () => {
+    expect(pokedexService.baseUrl === undefined).toBe(false)
+    expect(pokedexService.baseUrl === null).toBe(false)
+  });
 });
