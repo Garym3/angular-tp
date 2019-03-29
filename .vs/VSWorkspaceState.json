@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Application",
+    "\\Application\\src",
+    "\\Application\\src\\app",
+    "\\Application\\src\\app\\classes",
+    "\\Application\\src\\app\\services"
+  ],
+  "SelectedNode": "\\Application\\src\\app\\services\\pokedex.service.ts",
+  "PreviewInSolutionExplorer": false
+}

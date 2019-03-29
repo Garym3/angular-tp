@@ -18,6 +18,7 @@
       "ES6",
       "es2018",
       "dom"
-    ]
+    ],
+    "esModuleInterop": true
   }
 }

@@ -1,8 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { ArenaComponent } from './arena.component';
 import { Pokemon } from "../classes/pokemon";
-import { Fight } from "../fight/fight";
+import { Fight } from "../classes/fight";
 
 describe('ArenaComponent', () => {
   let component: ArenaComponent;
@@ -10,7 +13,13 @@ describe('ArenaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ArenaComponent ]
+      declarations: [ ArenaComponent ],
+      providers:[
+        RouterModule,
+        HttpClient,
+        HttpHandler
+      ],
+      imports: [ RouterTestingModule ]
     })
     .compileComponents();
   }));
@@ -21,44 +30,61 @@ describe('ArenaComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 
-  // test("Pokemon should have a name", () => {
-  //   const pokemon = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //   expect(pokemon.name !== undefined && pokemon.name.length > 0).toBe(true);
+  // it('#pauseFight() should switch pause button\' state', () => {
+  //   fixture.detectChanges();
+  //   let button = fixture.nativeElement.querySelector('#pauseBtn')
+  //   expect(document.querySelector("#pauseBtn").textContent === "Start fight").toBe(true);
+
+  //   button.click();
+  //   fixture.detectChanges();
+    
+  //   expect(document.querySelector("#pauseBtn").textContent === "Pause fight").toBe(true);
+
+  //   button.click();
+  //   fixture.detectChanges();
+    
+  //   expect(document.querySelector("#pauseBtn").textContent === "Start fight").toBe(true);
   // });
 
-  // test("Pokemon should not have a name", () => {
-  //     const pokemon = new Pokemon("", 100, 90, 50, 40, 50, 50);
-  //     expect(pokemon.name === undefined || pokemon.name.length <= 0).toBe(true);
+  // it('#restartFight() should restart the fight', () => {
+  //   component.ngOnInit();
+
+  //   // Start the fight if it's paused (is paused by default)
+  //   component.pauseFight();
+
+  //   const initialFight: Fight = component.fight;
+
+  //   component.restartFight();
+
+  //   const currentFight: Fight = component.fight;
+
+  //   expect(initialFight === currentFight).toBe(false);
   // });
 
-  // test("Fight should start", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const bulbizar = new Pokemon("Bulbizar", 100, 45, 65, 49, 65, 45);
-  //     const fight = new Fight(pickachu, bulbizar);
-  //     fight.start();
+  // it('#restartFight() should clear logs after restarting the fight', () => {
+  //   component.ngOnInit();
 
-  //     expect(fight.hasStarted).toBe(true);
+  //   // Start the fight if it's paused (is paused by default)
+  //   component.pauseFight();
+
+  //   const initialFightLogs: object[] = component.fightLogs;
+
+  //   component.restartFight();
+
+  //   const currentFightLogs: object[] = component.fightLogs;
+
+  //   expect(initialFightLogs === currentFightLogs).toBe(false);
   // });
 
-  // test("Pikachu should have lost", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const charizard = new Pokemon("Charizard", 100, 100, 109, 78, 85, 109);
-  //     const fight = new Fight(pickachu, charizard);
+  // it('#redirectToOpponentsMenu() should redirect to opponentsMenu', fakeAsync(() => {
+  //   component.ngOnInit();
 
-  //     fight.start();
-  //     expect(fight.isOver).toBe(true);
-  //     expect(fight.winner === charizard).toBe(true);
-  // });
-
-  // test("No riposte before fight has started", () => {
-  //     const pickachu = new Pokemon("Pikachu", 100, 90, 50, 40, 50, 50);
-  //     const charizard = new Pokemon("Charizard", 100, 100, 109, 78, 85, 109);
-  //     const fight = new Fight(pickachu, charizard);
-
-  //     expect(fight.riposte()).toBe(true);
-  // });
+  //   component.redirectToOpponentsMenu();
+  //   tick();
+  //   expect(location.pathname).toBe('/fighters-menu');
+  // }));
 });

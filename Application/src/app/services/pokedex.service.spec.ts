@@ -1,15 +1,40 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
 import { PokedexService } from './pokedex.service';
+import { Pokemon } from '../classes/pokemon';
+import { Skill } from '../classes/skill';
 
 describe('PokedexService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [],
-    providers: [PokedexService]
+  let pokedexService: PokedexService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [PokedexService]
+    });
+
+    pokedexService = TestBed.get(PokedexService);
+  });
+
+  it('#getPokemon should return Bulbasaur as a Pokémon', async(() => {
+    const http = TestBed.get(HttpTestingController);
+    const thunder: Skill = new Skill('thunder', 120, 70);
+    const powerWhip: Skill = new Skill('power whip', 120, 85);
+    const mockedPokemon: Pokemon = new Pokemon(1, "Bulbasaur", 1, 45, 45, 45, 45, 45, 45, [thunder, powerWhip], "", "");
+    const id: number = 1;
+
+    pokedexService.getPokemon(id).subscribe((pokemon: Pokemon) =>
+    {
+      expect(pokemon.name).toBe("Bulbasaur");
+      
+    });
+
+    http.expectOne(`${pokedexService.baseUrl}/${id}`).flush(mockedPokemon);
   }));
 
-  it('should return one pokemon', async() => {
-    const service: PokedexService = TestBed.get(PokedexService);
-    expect(service).toBeTruthy();
+  it('Base URL should be defined', () => {
+    expect(pokedexService.baseUrl === undefined).toBe(false)
+    expect(pokedexService.baseUrl === null).toBe(false)
   });
 });

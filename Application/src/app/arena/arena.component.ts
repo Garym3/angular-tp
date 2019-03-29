@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 import { Pokemon } from '../classes/pokemon';
 import { PokedexService } from '../services/pokedex.service';
 import { Skill } from '../classes/skill';
-import { Fight } from '../fight/fight';
+import { Fight } from '../classes/fight';
+import { disableDebugTools } from '@angular/platform-browser';
 
 
 @Component({
@@ -22,7 +23,6 @@ export class ArenaComponent implements OnInit {
   fightLogs: object[] = [];
   startDate: Date;
   intervalIsPaused: boolean = true;
-  rounds: Observable<Array<any>>;
   topOpponentBlinking: string = 'block';
   bottomOpponentBlinking: string = 'block';
   fightRoundInterval: NodeJS.Timer;
@@ -51,6 +51,9 @@ export class ArenaComponent implements OnInit {
           this.startFight();
         });
       });
+    }, error => 
+    {
+      alert(error);
     });
   }
 
@@ -80,7 +83,6 @@ export class ArenaComponent implements OnInit {
 
     this.handleFight(firstToAttack, secondToAttack);
   }
-
 
   private handleFight(attacker: Pokemon, attacked: Pokemon)
   {
