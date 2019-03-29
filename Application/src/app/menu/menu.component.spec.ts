@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 
 import { MenuComponent } from './menu.component';
 
@@ -8,6 +10,12 @@ describe('MenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      providers: [
+        RouterModule
+      ],
+      imports: [
+        RouterTestingModule
+      ],
       declarations: [ MenuComponent ]
     })
     .compileComponents();
@@ -20,6 +28,8 @@ describe('MenuComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(MenuComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
   });
 });

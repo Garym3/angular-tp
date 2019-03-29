@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class PokedexService
 {
-  private baseUrl: string = 'https://pokeapi.co/api/v2/pokemon';
+  baseUrl: string = 'https://pokeapi.co/api/v2/pokemon';
 
   constructor(private http: HttpClient)
   {

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Pokemon } from '../classes/pokemon';
 import { PokedexService } from '../services/pokedex.service';
 import { Skill } from '../classes/skill';
-import { Fight } from '../fight/fight';
+import { Fight } from '../classes/fight';
 
 
 @Component({
@@ -26,8 +26,9 @@ export class ArenaComponent implements OnInit {
   topOpponentBlinking: string = 'block';
   bottomOpponentBlinking: string = 'block';
   fightRoundInterval: NodeJS.Timer;
+  route: ActivatedRoute;
 
-  constructor(private router: Router, private route: ActivatedRoute, private pokedexService: PokedexService)
+  constructor(private router: Router, private pokedexService: PokedexService)
   {
 
   }
@@ -83,19 +84,8 @@ export class ArenaComponent implements OnInit {
     this.handleFight(firstToAttack, secondToAttack);
   }
 
-
   private handleFight(attacker: Pokemon, attacked: Pokemon)
   {
-    this.rounds = new Observable(subscriber => 
-    {
-      const interval = setInterval(() => subscriber.next(), 1000);
-      return () =>
-      {
-        subscriber.complete();
-        clearInterval(interval);
-      };
-    });
-
     this.fightRoundInterval = setInterval(() =>
     {
       if(this.intervalIsPaused) return;

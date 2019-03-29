@@ -1,5 +1,5 @@
-import {Pokemon} from '../classes/pokemon'
-import {Skill} from '../classes/skill'
+import {Pokemon} from './pokemon'
+import {Skill} from './skill'
 
 export class Fight {
     firstOpponent: Pokemon;
@@ -75,5 +75,19 @@ export class Fight {
     calculateDamages(attackingOpponent: Pokemon, currentAttack: Skill, attackedOpponent: Pokemon) : number
     {
       return (Math.floor(Math.floor(Math.floor((2 * attackingOpponent.level / 5) + 2) * (attackingOpponent.attack * currentAttack.power) / attackedOpponent.defense) / 50) + 2);
+    }
+
+    /****************************************************************************************************/
+    /****************************************************************************************************/
+
+    getFastest(): Pokemon{
+      return this.firstOpponent.speed >= this.secondOpponent.speed ? this.firstOpponent : this.secondOpponent;
+    }
+
+    /****************************************************************************************************/
+    /****************************************************************************************************/
+
+    getSlowest(): Pokemon{
+      return this.firstOpponent.speed >= this.secondOpponent.speed ? this.firstOpponent : this.secondOpponent;
     }
 }

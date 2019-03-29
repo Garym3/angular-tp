@@ -1,8 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { ArenaComponent } from './arena.component';
 import { Pokemon } from "../classes/pokemon";
-import { Fight } from "../fight/fight";
+import { Fight } from "../classes/fight";
 
 describe('ArenaComponent', () => {
   let component: ArenaComponent;
@@ -10,7 +13,13 @@ describe('ArenaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ArenaComponent ]
+      declarations: [ ArenaComponent ],
+      providers:[
+        RouterModule,
+        HttpClient,
+        HttpHandler
+      ],
+      imports: [ RouterTestingModule ]
     })
     .compileComponents();
   }));
@@ -23,6 +32,30 @@ describe('ArenaComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Should start fight with 2 opponents on init', () => {
+    expect(component.topOpponent === null).toBe(true)
+    expect(component.bottomOpponent === null).toBe(true)
+  });
+
+  it('Fastest Pokémon should attack first', () => {
+    const fastestPokemon: Pokemon = component.fight.getFastest();
+    const slowestPokemon: Pokemon = component.fight.getSlowest();
+    
+    expect(fastestPokemon.speed >= slowestPokemon.speed).toBe(true);
+  });
+
+  it('Should pause fight', () => {
+
+  });
+
+  it('Should resume fight', () => {
+
+  });
+
+  it('Should restart fight', () => {
+
   });
 
   // test("Pokemon should have a name", () => {
