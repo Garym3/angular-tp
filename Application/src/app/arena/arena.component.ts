@@ -32,22 +32,20 @@ export class ArenaComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    const thunder: Skill = new Skill('thunder', 120, 70);
-    const powerWhip: Skill = new Skill('power whip', 120, 85);
-
+  ngOnInit(): void
+  {
     this.route.queryParams.subscribe(params =>
     {
-      const firstFighterId = params['first'];
-      const secondFighterId = params['second'];
+      const firstFighterId: number = params['first'];
+      const secondFighterId: number = params['second'];
 
       this.pokedexService.getPokemon(firstFighterId).subscribe((result) =>
       {
-        this.topOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${firstFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${firstFighterId}.png`);
+        this.topOpponent = result;
 
         this.pokedexService.getPokemon(secondFighterId).subscribe((result) =>
         {
-          this.bottomOpponent = new Pokemon(result.id, result.name, 1, result.stats[5].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, result.stats[0].base_stat, [thunder, powerWhip], `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${secondFighterId}.png`, `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${secondFighterId}.png`);
+          this.bottomOpponent = result;
 
           this.initFight();
           this.startFight();
@@ -86,16 +84,6 @@ export class ArenaComponent implements OnInit {
 
   private handleFight(attacker: Pokemon, attacked: Pokemon)
   {
-    this.rounds = new Observable(subscriber => 
-    {
-      const interval = setInterval(() => subscriber.next(), 1000);
-      return () =>
-      {
-        subscriber.complete();
-        clearInterval(interval);
-      };
-    });
-
     this.fightRoundInterval = setInterval(() =>
     {
       if(this.intervalIsPaused) return;

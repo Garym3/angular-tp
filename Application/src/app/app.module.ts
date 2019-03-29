@@ -9,13 +9,15 @@ import { ArenaComponent } from './arena/arena.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { PokedexService } from './services/pokedex.service';
+import { CreatePokemonComponent } from './createPokemon/createPokemon.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArenaComponent,
     MenuComponent,
-    FightersMenuComponent
+    FightersMenuComponent,
+    CreatePokemonComponent
   ],
   imports: [
     BrowserModule,
